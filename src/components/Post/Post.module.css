@@ -1,0 +1,36 @@
+.post {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.post header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.content {
+    width: 100%;
+}
+
+.bottom {
+    padding: 15px;
+}
+
+.bottom section {
+    margin-bottom: 15px;
+}
+
+.bottom .buttons {
+    display: flex;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.comments {
+    color: gray;
+}
