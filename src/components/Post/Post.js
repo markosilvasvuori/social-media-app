@@ -1,7 +1,9 @@
+import classes from './Post.module.css';
+
 const Post = ({ username, imageUrl, likes, caption, comments }) => {
     return (
         <div className={classes.post}>
-            <header>
+            <header className={classes.header}>
                 <div className={classes.user}>
                     <img src='' alt='' />
                     <p className={classes.bold}>{username}</p>
