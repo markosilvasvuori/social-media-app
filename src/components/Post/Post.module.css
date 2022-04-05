@@ -4,15 +4,25 @@
     margin-bottom: 15px;
 }
 
-.post header {
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 15px;
 }
 
-.content {
+.user {
+    display: flex;
+}
+
+.content,
+.content img {
     width: 100%;
+}
+
+.content img {
+    max-height: 500px;
+    object-fit: cover;
 }
 
 .bottom {
@@ -23,8 +33,12 @@
     margin-bottom: 15px;
 }
 
-.bottom .buttons {
+.buttons {
     display: flex;
+}
+
+.buttons button:first-child {
+    margin-right: 15px;
 }
 
 .bold {
