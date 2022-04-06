@@ -8,14 +8,14 @@ const Home = () => {
     const {ctxValue} = useContext(AuthContext);
 
     return (
-        <Fragment>
+        <div className='page-wrapper'>
             {!ctxValue.isLoggedIn &&
                 <RegisterAndLogin />
             }
             {ctxValue.isLoggedIn &&
                 <HomeFeed />
             }
-        </Fragment>
+        </div>
     );
 };
 
