@@ -32,6 +32,11 @@
     text-align: center;
 }
 
+.clickable {
+    font-weight: bold;
+    color: #48cae4;
+}
+
 @media screen and (min-width: 768px) {
     .column-left {
         display: block;
