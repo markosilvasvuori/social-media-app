@@ -1,9 +1,10 @@
+import Logo from '../UI/Logo';
 import classes from './Header.module.css';
 
 const Header = () => {
     return (
         <header className={classes.header}>
-            <h1>Instagram</h1>
+            <Logo size={'medium'} />
             <nav className={classes.nav}>
                 <ul>
                     <li>
