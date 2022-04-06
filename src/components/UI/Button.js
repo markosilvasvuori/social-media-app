@@ -4,8 +4,11 @@ const Button = (props) => {
     const styles = `${classes.button} ${props.className ? props.className : ''}`;
 
     const clickHandler = () => {
-        props.onClick();
-        console.log('clicked')
+        if (props.onClick) {
+            props.onClick();
+        } else {
+            return;
+        }
     }
 
     return (
