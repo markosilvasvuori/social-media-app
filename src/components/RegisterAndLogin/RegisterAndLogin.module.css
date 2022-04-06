@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 930px;
+    height: 550px;
+    padding: 20px;
+}
+
+.column-left {
+    display: none;
+    width: 50%;
+    padding-right: 30px;
+}
+
+.column-left img {
+    width: 100%;
+}
+
+.column-right {
+    width: 100%;
+    text-align: center;
+}
+
+.forms {
+    padding: 20px 40px;
+}
+
+.register {
+    margin-top: 40px;
+    padding: 20px 40px;
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .column-left {
+        display: block;
+    }
+
+    .column-right {
+        width: 50%;
+    }
+
+    .forms,
+    .register {
+        border: 1px solid gray;
+    }
+}
