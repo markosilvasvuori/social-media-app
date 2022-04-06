@@ -29,10 +29,10 @@ const RegisterAndLogin = () => {
                 </div>
                 <div className={classes.register}>
                     {!createAccount && 
-                        <p>Don't have account? <span onClick={changeFormHandler}>Register</span></p>
+                        <p>Don't have an account? <span className={classes.clickable} onClick={changeFormHandler}>Register</span></p>
                     }
                     {createAccount &&
-                        <p>Already have an account? <span onClick={changeFormHandler}>Login</span></p>
+                        <p>Have an account? <span className={classes.clickable} onClick={changeFormHandler}>Log in</span></p>
                     }
                 </div>
             </div>
