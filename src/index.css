@@ -7,7 +7,7 @@
 html,
 body {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
 }
 
 body {
@@ -23,4 +23,15 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 930px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-top: 53px; /* Must be same as header height */
 }
