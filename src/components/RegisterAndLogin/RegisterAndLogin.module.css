@@ -27,7 +27,7 @@
 }
 
 .register {
-    margin-top: 40px;
+    margin-top: 15px;
     padding: 20px 40px;
     text-align: center;
 }
@@ -35,6 +35,7 @@
 .clickable {
     font-weight: bold;
     color: #48cae4;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 768px) {
