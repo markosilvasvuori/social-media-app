@@ -1,10 +1,12 @@
 .form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin-top: 40px;
 }
 
 .form input {
+    width: 100%;
     height: 40px;
     margin-bottom: 15px;
     padding: 0 8px;
@@ -19,4 +21,12 @@
 
 .guest-button {
     margin-top: 15px;
+}
+
+.error {
+    color: red;
+}
+
+.error li {
+    list-style: none;
 }
