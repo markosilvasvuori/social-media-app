@@ -6,12 +6,3 @@
     padding: 10px 20px;
     border-bottom: 1px solid gray;
 }
-
-.nav ul {
-    display: flex;
-    list-style: none;
-}
-
-.nav li {
-    margin-right: 20px;
-}
