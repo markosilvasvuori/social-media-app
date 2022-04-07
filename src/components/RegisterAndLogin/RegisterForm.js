@@ -1,12 +1,13 @@
-import { useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, firestoreDB } from '../../firebase/firebase';
+import { useState, useContext } from 'react';
+
+import { AuthContext } from '../../store/auth-context';
 
 import Button from '../UI/Button';
+import LoadingSpinner from '../UI/LoadingSpinner';
 import classes from './Form.module.css';
 
 const RegisterForm = () => {
+    const {ctxValue} = useContext(AuthContext);
     const [error, setError] = useState([]);
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredName, setEnteredName] = useState('');
@@ -52,7 +53,7 @@ const RegisterForm = () => {
             isValid = false;
             setError(prevErrors => ([
                 ...prevErrors,
-                'Enter valid email'
+                'Enter a valid email address'
             ]));
         };
 
@@ -80,7 +81,7 @@ const RegisterForm = () => {
             ]));
         };
 
-        if (enteredConfirmPassword.trim() === '') {
+        if (enteredConfirmPassword.trim() === '' && enteredPassword.trim().length >= 6) {
             isValid = false;
             setError(prevErrors => ([
                 ...prevErrors,
@@ -96,25 +97,15 @@ const RegisterForm = () => {
 
         // Sign up new user
         if (validateForm()) {
-            createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
-                .catch((userCredentials) => {
-                    const user = userCredentials.user;
-                    return setDoc(doc(firestoreDB, 'users', user.uid), {
-                        name: enteredName,
-                        username: enteredUsername,
-                        email: enteredEmail,
-                        bio: '',
-                        website: '',
-                        followers: 0,
-                        following: 0,
-                        posts: [],
-                        likedPosts: [],
-                    });
-                })
-                .catch((error) => {
-                    console.log(error.message);
-                });
-        }
+            const newUserData = {
+                email: enteredEmail,
+                password: enteredPassword,
+                name: enteredName,
+                username: enteredUsername,
+            };
+
+            ctxValue.signUp(newUserData);
+        };
     };
     
     return (
@@ -144,10 +135,17 @@ const RegisterForm = () => {
                 placeholder='Confirm Password' 
                 onChange={enteredConfirmPasswordHandler} 
             />
-            {error && 
-                error.map(err => <p>{err}</p>)
+            {!ctxValue.isLoading &&
+                <Button>Register</Button>
             }
-            <Button>Register</Button>
+            {ctxValue.isLoading &&
+                    <LoadingSpinner />
+                }
+            {error && 
+                <ul className={classes.error}>
+                    {error.map(err => <li>{err}</li>)}
+                </ul>
+            }
         </form>
     );
 };
