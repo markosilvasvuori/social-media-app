@@ -1,13 +1,11 @@
 import { Fragment, useState, useContext } from 'react';
 
-import { AuthContext } from '../../store/auth-context';
 import { UserContext } from '../../store/user-context';
 import Button from '../UI/Button';
 import classes from './ProfileDetails.module.css';
 
 const ProfileDetails = () => {
     const [isEditing, setIsEditing] = useState(false);
-    const {ctxValue} = useContext(AuthContext);
     const {userCtx} = useContext(UserContext);
     const user = userCtx.user;
 
