@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 
-import { AuthContext } from '../store/auth-context';
+import { UserContext } from '../store/user-context';
 import ProfileDetails from '../components/Profile/ProfileDetails';
 
 const Home = () => {
-    const {ctxValue} = useContext(AuthContext);
+    const {userCtx} = useContext(UserContext);
 
     return (
         <div className='page-wrapper'>
