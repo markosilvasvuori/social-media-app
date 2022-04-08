@@ -1,13 +1,16 @@
 import { Fragment, useState, useContext } from 'react';
 
 import { AuthContext } from '../../store/auth-context';
+import { UserContext } from '../../store/user-context';
 import Button from '../UI/Button';
 import classes from './ProfileDetails.module.css';
 
 const ProfileDetails = () => {
-    const {ctxValue} = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
-console.log(ctxValue.user);
+    const {ctxValue} = useContext(AuthContext);
+    const {userCtx} = useContext(UserContext);
+    const user = userCtx.user;
+
     const openSettingsHandler = () => {
         setIsEditing(!isEditing);
     };
@@ -23,7 +26,7 @@ console.log(ctxValue.user);
                     </div>
                     <div className={classes.details}>
                         <div className={classes.top}>
-                            <h2>Username</h2>
+                            <h2>{user.username}</h2>
                             <Button onClick={openSettingsHandler}>Edit</Button>
                         </div>
                         <div className={classes.middle}>
