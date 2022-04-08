@@ -15,7 +15,6 @@ export const AuthContext = createContext({
 export const AuthProvider = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [user, setUser] = useState(null);
     const [error, setError] = useState('');
 
     // Login
@@ -25,7 +24,6 @@ export const AuthProvider = (props) => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 setIsLoggedIn(true);
-                setUser(user);
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -45,7 +43,6 @@ export const AuthProvider = (props) => {
         createUserWithEmailAndPassword(auth, newUserData.email, newUserData.password)
         .then((userCredentials) => {
             const user = userCredentials.user;
-            setUser(user);
             return setDoc(doc(firestoreDB, 'users', user.uid), {
                 name: newUserData.name,
                 username: newUserData.username,
@@ -70,7 +67,6 @@ export const AuthProvider = (props) => {
         login: loginHandler,
         logout: logoutHandler,
         signUp: signUpHandler,
-        user: user,
         isLoading: isLoading,
         error: error,
     };
