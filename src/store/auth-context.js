@@ -42,7 +42,6 @@ export const AuthProvider = (props) => {
         createUserWithEmailAndPassword(auth, newUserData.email, newUserData.password)
         .then((userCredentials) => {
             const user = userCredentials.user;
-            console.log(user)
             return setDoc(doc(firestoreDB, 'users', user.uid), {
                 name: newUserData.name,
                 username: newUserData.username,
@@ -62,7 +61,7 @@ export const AuthProvider = (props) => {
         setIsLoggedIn(true);
     };
 
-    const ctxValue = {
+    const authCtx = {
         isLoggedIn: isLoggedIn,
         login: loginHandler,
         logout: logoutHandler,
@@ -72,7 +71,7 @@ export const AuthProvider = (props) => {
     };
 
     return (
-        <AuthContext.Provider value={{ctxValue}}>
+        <AuthContext.Provider value={{authCtx}}>
             {props.children}
         </AuthContext.Provider>
     );
