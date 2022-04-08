@@ -7,7 +7,7 @@ import LoadingSpinner from '../UI/LoadingSpinner';
 import classes from './Form.module.css';
 
 const RegisterForm = () => {
-    const {ctxValue} = useContext(AuthContext);
+    const {authCtx} = useContext(AuthContext);
     const [error, setError] = useState([]);
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredName, setEnteredName] = useState('');
@@ -104,7 +104,7 @@ const RegisterForm = () => {
                 username: enteredUsername,
             };
 
-            ctxValue.signUp(newUserData);
+            authCtx.signUp(newUserData);
         };
     };
     
@@ -135,10 +135,10 @@ const RegisterForm = () => {
                 placeholder='Confirm Password' 
                 onChange={enteredConfirmPasswordHandler} 
             />
-            {!ctxValue.isLoading &&
+            {!authCtx.isLoading &&
                 <Button>Register</Button>
             }
-            {ctxValue.isLoading &&
+            {authCtx.isLoading &&
                     <LoadingSpinner />
                 }
             {error && 
