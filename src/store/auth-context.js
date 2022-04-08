@@ -62,7 +62,7 @@ export const AuthProvider = (props) => {
         setIsLoggedIn(true);
     };
 
-    const ctxValue = {
+    const authCtx = {
         isLoggedIn: isLoggedIn,
         login: loginHandler,
         logout: logoutHandler,
@@ -72,7 +72,7 @@ export const AuthProvider = (props) => {
     };
 
     return (
-        <AuthContext.Provider value={{ctxValue}}>
+        <AuthContext.Provider value={{authCtx}}>
             {props.children}
         </AuthContext.Provider>
     );

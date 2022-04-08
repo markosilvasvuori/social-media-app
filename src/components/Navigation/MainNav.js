@@ -1,23 +1,24 @@
 import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
-import { AuthContext } from '../../store/auth-context';
+import { UserContext } from '../../store/user-context';
 import classes from './MainNav.module.css';
 
 const MainNav = () => {
-    const {ctxValue} = useContext(AuthContext);
-    // const username = ctxValue.user.username;
+    const {userCtx} = useContext(UserContext);
+    // const username = userCtx.user.username;
 
     return (
         <nav className={classes.nav}>
             <ul>
                 <li>
-                    <a href='/'>Home</a>
+                    <Link to='/'>Home</Link>
                 </li>
                 <li>
-                    <a href='/'>Add</a>
+                    <Link to='/'>Add</Link>
                 </li>
                 <li>
-                    <a href={`profile/:username`}>Profile</a>
+                    <Link to={`profile/:${userCtx.user.username}`}>Profile</Link>
                 </li>
             </ul>
         </nav>
