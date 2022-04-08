@@ -5,14 +5,14 @@ import RegisterAndLogin from '../components/RegisterAndLogin/RegisterAndLogin';
 import HomeFeed from '../components/HomeFeed/HomeFeed';
 
 const Home = () => {
-    const {ctxValue} = useContext(AuthContext);
+    const {authCtx} = useContext(AuthContext);
 
     return (
         <div className='page-wrapper'>
-            {!ctxValue.isLoggedIn &&
+            {!authCtx.isLoggedIn &&
                 <RegisterAndLogin />
             }
-            {ctxValue.isLoggedIn &&
+            {authCtx.isLoggedIn &&
                 <HomeFeed />
             }
         </div>
