@@ -9,7 +9,7 @@ const LoginForm = () => {
     const [error, setError] = useState([]);
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
-    const {ctxValue} = useContext(AuthContext);
+    const {authCtx} = useContext(AuthContext);
 
     const enteredEmailHandler = (event) => {
         setEnteredEmail(event.target.value);
@@ -46,8 +46,9 @@ const LoginForm = () => {
         event.preventDefault();
 
         if (validateForm()) {
-            ctxValue.login(enteredEmail, enteredPassword);
+            authCtx.login(enteredEmail, enteredPassword);
         }
+        
     };
     
     return (
@@ -63,10 +64,10 @@ const LoginForm = () => {
                     placeholder='Password' 
                     onChange={enteredPasswordHandler} 
                 />
-                {!ctxValue.isLoading &&
+                {!authCtx.isLoading &&
                     <Button>Login</Button>
                 }
-                {ctxValue.isLoading &&
+                {authCtx.isLoading &&
                     <LoadingSpinner />
                 }
                 {error && 
@@ -74,8 +75,8 @@ const LoginForm = () => {
                         {error.map(err => <li>{err}</li>)}
                     </ul>
                 }
-                {ctxValue.error &&
-                    <p className={classes.error}>{ctxValue.error}</p>
+                {authCtx.error &&
+                    <p className={classes.error}>{authCtx.error}</p>
                 }
             </form>
             <p className={classes.p}>Or</p>
