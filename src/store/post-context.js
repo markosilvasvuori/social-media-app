@@ -25,7 +25,7 @@ export const PostProvider = (props) => {
             console.log('Uploaded file!');
         });
 
-        setDoc(doc(firestoreDB, `users/${userId}/posts/${uniqueId}`), {
+        setDoc(doc(firestoreDB, `posts/${userId}/posts/${uniqueId}`), {
             caption: caption,
             likes: [],
             comments: [],
