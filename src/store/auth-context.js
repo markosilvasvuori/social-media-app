@@ -51,6 +51,7 @@ export const AuthProvider = (props) => {
         .then((userCredentials) => {
             const user = userCredentials.user;
             return setDoc(doc(firestoreDB, 'users', user.uid), {
+                userId: user.uid,
                 name: newUserData.name,
                 username: newUserData.username,
                 email: newUserData.email,
