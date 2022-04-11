@@ -16,12 +16,17 @@ const HomeFeed = () => {
         getPosts();
     }, []);
 
+    useEffect(() => {
+        console.log(posts);
+    }, [posts]);
+
     return (
         <div className={classes['home-feed']}>
             {posts.map(post => (
                 <Post
+                    key={post.postId}
                     username={post.username}
-                    imageUrl={post.imageUrl}
+                    imageId={post.postId}
                     likes={post.likes}
                     capiton={post.caption}
                     comments={post.comments}
