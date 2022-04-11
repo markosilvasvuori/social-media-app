@@ -16,6 +16,14 @@ export const AuthProvider = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    })
+
     // Login
     const loginHandler = (email, password) => {
         setIsLoading(true);
