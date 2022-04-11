@@ -1,7 +1,9 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { ref, uploadBytes } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 import { storage, firestoreDB } from '../firebase/firebase';
+
+import { UserContext } from './user-context';
 
 export const PostContext = createContext({
     createPost: () => {},
@@ -10,6 +12,7 @@ export const PostContext = createContext({
 });
 
 export const PostProvider = (props) => {
+    const {userCtx} = useContext(UserContext);
 
     const generateUniqueId = () => {
         const dateString = Date.now().toString(36);
@@ -26,6 +29,9 @@ export const PostProvider = (props) => {
         });
 
         setDoc(doc(firestoreDB, `posts/${uniqueId}`), {
+            postId: uniqueId,
+            userId: userCtx.user.userId,
+            username: userCtx.user.username,
             caption: caption,
             likes: [],
             comments: [],
