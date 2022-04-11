@@ -13,7 +13,7 @@ export const PostContext = createContext({
 
 export const PostProvider = (props) => {
     const {userCtx} = useContext(UserContext);
-
+console.log(userCtx.user)
     const generateUniqueId = () => {
         const dateString = Date.now().toString(36);
         const mathString = Math.random().toString(36).substring(2);
@@ -30,7 +30,7 @@ export const PostProvider = (props) => {
 
         setDoc(doc(firestoreDB, `posts/${uniqueId}`), {
             postId: uniqueId,
-            userId: userCtx.user.userId,
+            userId: userId,
             username: userCtx.user.username,
             caption: caption,
             likes: [],
