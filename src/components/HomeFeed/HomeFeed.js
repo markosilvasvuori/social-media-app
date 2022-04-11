@@ -25,6 +25,7 @@ const HomeFeed = () => {
             {posts.map(post => (
                 <Post
                     key={post.postId}
+                    userId={post.userId}
                     username={post.username}
                     imageId={post.postId}
                     likes={post.likes}
