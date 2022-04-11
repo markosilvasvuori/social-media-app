@@ -1,6 +1,28 @@
+import { useEffect, useState } from 'react';
+
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase/firebase';
+
 import classes from './Post.module.css';
 
-const Post = ({ username, imageUrl, likes, caption, comments }) => {
+const Post = ({ username, userId, imageId, likes, caption, comments }) => {
+    const [imageUrl, setImageUrl] = useState(null);
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            await getDownloadURL(ref(storage, `posts/${userId}/${imageId}`))
+            .then((url) => {
+                setImageUrl(url);
+            })
+            .catch((error) => {
+                console.log(error.code);
+                console.log(error.message);
+            });
+        };
+
+        fetchImage();
+    }, []);
+
     return (
         <div className={classes.post}>
             <header className={classes.header}>
