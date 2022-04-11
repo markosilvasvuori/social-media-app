@@ -6,14 +6,17 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from './store/auth-context';
 import { UserProvider } from './store/user-context';
+import { PostProvider } from './store/post-context';
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <UserProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+        <PostProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+      </PostProvider>
       </UserProvider>
     </AuthProvider>
   </React.StrictMode>,
