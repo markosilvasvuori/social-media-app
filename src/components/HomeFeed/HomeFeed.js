@@ -29,7 +29,7 @@ const HomeFeed = () => {
                     username={post.username}
                     imageId={post.postId}
                     likes={post.likes}
-                    capiton={post.caption}
+                    caption={post.caption}
                     comments={post.comments}
                 />
             ))}
