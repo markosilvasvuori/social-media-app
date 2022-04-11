@@ -16,6 +16,14 @@ export const AuthProvider = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    })
+
     // Login
     const loginHandler = (email, password) => {
         setIsLoading(true);
@@ -43,6 +51,7 @@ export const AuthProvider = (props) => {
         .then((userCredentials) => {
             const user = userCredentials.user;
             return setDoc(doc(firestoreDB, 'users', user.uid), {
+                userId: user.uid,
                 name: newUserData.name,
                 username: newUserData.username,
                 email: newUserData.email,
