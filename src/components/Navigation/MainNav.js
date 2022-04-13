@@ -5,12 +5,12 @@ import { UserContext } from '../../store/user-context';
 import classes from './MainNav.module.css';
 
 const MainNav = () => {
-    const [username, setUsername] = useState('');
+    const [userId, setUserId] = useState('');
     const {userCtx} = useContext(UserContext);
 
     useEffect(() => {
         if (userCtx.user) {
-            setUsername(userCtx.user.username);
+            setUserId(userCtx.user.userId);
         }
     }, [userCtx.user]);
 
@@ -24,7 +24,7 @@ const MainNav = () => {
                     <Link to='/'>Add</Link>
                 </li>
                 <li>
-                    <Link to={`profile/${username}`}>Profile</Link>
+                    <Link to={`profile/${userId}`}>Profile</Link>
                 </li>
             </ul>
         </nav>
