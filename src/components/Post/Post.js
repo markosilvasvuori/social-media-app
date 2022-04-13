@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
@@ -60,7 +61,9 @@ const Post = ({ userId, imageId, username, profilePicture, likes, caption, comme
                         size={'small'} 
                         userId={userId}
                     />
-                    <p className={classes.bold}>{username}</p>
+                    <Link to={`profile/${userId}`}>
+                        <p className={classes.bold}>{username}</p>
+                    </Link>
                 </div>
                 <button>...</button>
             </header>
