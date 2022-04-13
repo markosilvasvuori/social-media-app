@@ -61,6 +61,7 @@ export const AuthProvider = (props) => {
                 following: 0,
                 posts: [],
                 likedPosts: [],
+                profilePicture: null,
             });
         })
         .catch((error) => {
