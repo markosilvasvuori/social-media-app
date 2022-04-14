@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getCollection } from '../../firebase/firebase';
 
-import Post from '../Post/Post';
+import HomeFeedPost from '../Post/HomeFeedPost';
 import classes from './HomeFeed.module.css';
 
 const HomeFeed = () => {
@@ -23,7 +23,7 @@ const HomeFeed = () => {
     return (
         <div className={classes['home-feed']}>
             {posts.map(post => (
-                <Post
+                <HomeFeedPost
                     key={post.postId}
                     userId={post.userId}
                     username={post.username}

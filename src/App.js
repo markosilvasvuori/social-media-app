@@ -27,7 +27,7 @@ function App() {
       }
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='profile/:username' element={<Profile />} />
+        <Route path='profile/:userId' element={<Profile />} />
       </Routes>
     </Fragment>
   );
