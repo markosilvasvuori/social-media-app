@@ -82,7 +82,12 @@ const Post = ({ userId, imageId, username, profilePicture, likes, caption, comme
                 </section>
                 <section>
                     <p>
-                        <a className={classes.bold} href='#'>{username} </a>
+                        <Link 
+                            className={classes.bold} 
+                            to={`profile/${userId}`}
+                        >
+                            {username}
+                        </Link>
                         {caption}
                     </p>
                 </section>

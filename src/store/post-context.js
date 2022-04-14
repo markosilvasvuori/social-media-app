@@ -13,7 +13,7 @@ export const PostContext = createContext({
 
 export const PostProvider = (props) => {
     const {userCtx} = useContext(UserContext);
-console.log(userCtx.user)
+
     const generateUniqueId = () => {
         const dateString = Date.now().toString(36);
         const mathString = Math.random().toString(36).substring(2);
@@ -28,7 +28,7 @@ console.log(userCtx.user)
             console.log('Uploaded file!');
         });
 
-        setDoc(doc(firestoreDB, `posts/${uniqueId}`), {
+        setDoc(doc(firestoreDB, `users/${userId}/posts/${uniqueId}`), {
             postId: uniqueId,
             userId: userId,
             username: userCtx.user.username,
