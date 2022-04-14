@@ -1,0 +1,18 @@
+.post {
+    width: calc(33.3% - 4px);
+    height: 100%;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.post img {
+    object-fit: cover;
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .post {
+        width: calc(33.3% - 20px);
+        margin: 10px;
+    }
+}
