@@ -26,8 +26,14 @@ function App() {
         <Header />
       }
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='profile/:userId' element={<Profile />} />
+        <Route 
+          path='/' 
+          element={<Home />} 
+        />
+        <Route 
+          path='profile/:userId' 
+          element={<Profile />} 
+        />
       </Routes>
     </Fragment>
   );
