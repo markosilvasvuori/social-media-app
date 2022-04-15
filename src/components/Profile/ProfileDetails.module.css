@@ -67,6 +67,10 @@
     font-weight: bold;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 @media screen and (min-width: 768px) {
     .user-header {
         flex-direction: row;
