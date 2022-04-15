@@ -42,7 +42,7 @@ export const AuthProvider = (props) => {
 
     // Logout
     const logoutHandler = () => {
-
+        localStorage.removeItem('user');
     };
 
     // Sign up new user
