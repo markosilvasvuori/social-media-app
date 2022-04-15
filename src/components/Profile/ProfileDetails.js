@@ -35,7 +35,6 @@ const ProfileDetails = () => {
         if (userData.followers?.includes(currentUser.userId)) {
             setIsFollowing(true);
         }
-
     }, [userData]);
 
     const openSettingsHandler = () => {
@@ -43,32 +42,12 @@ const ProfileDetails = () => {
     };
 
     const followHandler = async () => {
-        const currentUserFollowingRef = doc(firestoreDB, 'users', currentUser.userId);
-        const userFollowingRef = doc(firestoreDB, 'users', userId);
-
-        await updateDoc(currentUserFollowingRef, {
-            following: arrayUnion(userId)
-        });
-
-        await updateDoc(userFollowingRef, {
-            followers: arrayUnion(currentUser.userId)
-        });
-
+        await userCtx.follow(userId);
         setIsFollowing(true);
     };
 
     const unfollowHandler = async () => {
-        const currentUserFollowingRef = doc(firestoreDB, 'users', currentUser.userId);
-        const userFollowingRef = doc(firestoreDB, 'users', userId);
-
-        await updateDoc(currentUserFollowingRef, {
-            following: arrayRemove(userId)
-        });
-
-        await updateDoc(userFollowingRef, {
-            followers: arrayRemove(currentUser.userId)
-        });
-
+        await userCtx.unfollow(userId);
         setIsFollowing(false);
     };
     
