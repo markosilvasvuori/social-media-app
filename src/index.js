@@ -7,15 +7,18 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './store/auth-context';
 import { UserProvider } from './store/user-context';
 import { PostProvider } from './store/post-context';
+import { ModalProvider } from './store/modal-context';
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
       <UserProvider>
         <PostProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ModalProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ModalProvider>
       </PostProvider>
       </UserProvider>
     </AuthProvider>
