@@ -8,10 +8,13 @@ import './App.css';
 
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Modal from './components/Modal/Modal';
+import { ModalContext } from './store/modal-context';
 
 function App() {
   const {authCtx} = useContext(AuthContext);
   const {userCtx} = useContext(UserContext);
+  const {modalCtx} = useContext(ModalContext);
 
   // If logged in, get user data
   useEffect(() => {
@@ -24,6 +27,9 @@ function App() {
     <Fragment>
       {authCtx.isLoggedIn &&
         <Header />
+      }
+      {modalCtx.modal &&
+        <Modal />
       }
       <Routes>
         <Route 
