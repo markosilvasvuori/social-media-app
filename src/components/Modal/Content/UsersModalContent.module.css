@@ -1,0 +1,52 @@
+.modal-content header {
+    position: relative;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+}
+
+.modal-content header *{
+    font-size: 0.875rem;
+}
+
+.modal-content header p {
+    margin-top: 5px;
+    color: gray;
+}
+
+.modal-content ul {
+    padding: 10px 20px;
+    list-style: none;
+}
+
+.modal-content li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    flex: 1 1 100px;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.name span:first-child {
+    font-weight: bold;
+}
+
+.name span:last-child {
+    color: gray;
+}
+
+.button {
+    flex: 0 0 auto;
+    margin-left: 25px;
+}

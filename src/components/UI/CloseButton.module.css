@@ -1,0 +1,29 @@
+.close-button {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.close-button span {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #000;
+    border-radius: 4px;
+}
+
+.close-button span:first-child {
+    transform: rotate(45deg);
+}
+
+.close-button span:last-child {
+    transform: rotate(-45deg);
+}
