@@ -27,6 +27,14 @@ export const UserProvider = (props) => {
         }
     };
 
+    const updateUserData = async () => {
+        const docSnapshot = await getDoc(currentUserRef);
+        if (docSnapshot.exists()) {
+            setUser(docSnapshot.data());
+            localStorage.setItem('user', docSnapshot.data());
+        };
+    };
+
     const followHandler = async (userToFollowId) => {
         const currentUserRef = doc(firestoreDB, 'users', user.userId);
         const userToFollowRef = doc(firestoreDB, 'users', userToFollowId);
@@ -38,6 +46,8 @@ export const UserProvider = (props) => {
         await updateDoc(userToFollowRef, {
             followers: arrayUnion(user.userId)
         });
+
+        updateUserData();
     };
 
     const unfollowHandler = async (userToUnfollowId) => {
@@ -51,6 +61,8 @@ export const UserProvider = (props) => {
         await updateDoc(userToUnfollowRef, {
             followers: arrayRemove(user.userId)
         });
+
+        updateUserData();
     };
 
     const userCtx = {
