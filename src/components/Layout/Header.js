@@ -8,7 +8,6 @@ const Header = () => {
         <header className={classes.header}>
             <Logo size={'medium'} />
             <MainNav />
-            <CreatePostForm />
         </header>
     );
 };
