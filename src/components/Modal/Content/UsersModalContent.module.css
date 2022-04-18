@@ -32,17 +32,18 @@
     flex: 1 1 100px;
 }
 
-.name {
+.name a {
     display: flex;
     flex-direction: column;
     margin-left: 5px;
+    text-decoration: none;
 }
 
-.name span:first-child {
+.name a span:first-child {
     font-weight: bold;
 }
 
-.name span:last-child {
+.name a span:last-child {
     color: gray;
 }
 
