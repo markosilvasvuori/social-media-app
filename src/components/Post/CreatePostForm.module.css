@@ -1,0 +1,27 @@
+.header {
+    position: relative;
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+    padding: 10px;
+}
+
+.header h2 {
+    font-size: 0.875rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form input,
+.form textarea {
+    margin-bottom: 40px;
+}
+
+.form textarea {
+    height: 100px;
+    padding: 5px 10px;
+    resize: none;
+}
