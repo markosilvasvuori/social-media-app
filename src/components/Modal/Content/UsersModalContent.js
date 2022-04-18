@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { doc, getDoc } from "firebase/firestore";
 import { firestoreDB } from "../../../firebase/firebase";
@@ -48,30 +49,37 @@ const UsersModalContent = ({ users, username, category }) => {
                     <li key={user.userId}>
                         <div className={classes.user}>
                             <ProfilePicture
-                                pictureUrl={user.ProfilePicture}
+                                userId={user.userId}
                                 size={'small'}
                             />
                             <div className={classes.name}>
-                                <span>{user.username}</span>
-                                <span>{user.name}</span>
+                                <Link 
+                                    to={`profile/${user.userId}`}
+                                    onClick={modalCtx.modalHandler}
+                                >
+                                    <span>{user.username}</span>
+                                    <span>{user.name}</span>
+                                </Link>
                             </div>
                         </div>
-                        <div className={classes.button}>
-                            {!currentUser.following.includes(user.userId) &&
-                                <Button 
-                                    onClick={() => userCtx.follow(user.userId)}
-                                >
-                                    Follow
-                                </Button>
-                            }
-                            {currentUser.following.includes(user.userId) &&
-                                <Button 
-                                    onClick={() => userCtx.unfollow(user.userId)}
-                                >
-                                    Unfollow
-                                </Button>
-                            }
-                        </div>
+                        {user.userId !== currentUser.userId &&
+                            <div className={classes.button}>
+                                {!currentUser.following.includes(user.userId) &&
+                                    <Button 
+                                        onClick={() => userCtx.follow(user.userId)}
+                                    >
+                                        Follow
+                                    </Button>
+                                }
+                                {currentUser.following.includes(user.userId) &&
+                                    <Button 
+                                        onClick={() => userCtx.unfollow(user.userId)}
+                                    >
+                                        Unfollow
+                                    </Button>
+                                }
+                            </div>
+                        }
                     </li>
                 ))}
             </ul>
