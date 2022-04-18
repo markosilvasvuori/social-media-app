@@ -27,8 +27,8 @@ export const UserProvider = (props) => {
         }
     };
 
-    const updateUserData = async () => {
-        const docSnapshot = await getDoc(currentUserRef);
+    const updateUserData = async (currentUser) => {
+        const docSnapshot = await getDoc(currentUser);
         if (docSnapshot.exists()) {
             setUser(docSnapshot.data());
             localStorage.setItem('user', docSnapshot.data());
@@ -47,7 +47,7 @@ export const UserProvider = (props) => {
             followers: arrayUnion(user.userId)
         });
 
-        updateUserData();
+        updateUserData(currentUserRef);
     };
 
     const unfollowHandler = async (userToUnfollowId) => {
@@ -62,7 +62,7 @@ export const UserProvider = (props) => {
             followers: arrayRemove(user.userId)
         });
 
-        updateUserData();
+        updateUserData(currentUserRef);
     };
 
     const userCtx = {
