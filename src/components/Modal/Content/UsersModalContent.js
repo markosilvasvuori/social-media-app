@@ -73,6 +73,7 @@ const UsersModalContent = ({ users, username, category }) => {
                                 }
                                 {currentUser.following.includes(user.userId) &&
                                     <Button 
+                                        outline={true}
                                         onClick={() => userCtx.unfollow(user.userId)}
                                     >
                                         Unfollow
