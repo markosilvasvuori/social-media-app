@@ -92,6 +92,7 @@ const ProfileDetails = () => {
                             <h2>{userData.username}</h2>
                             {userId === currentUser.userId &&
                                 <Button 
+                                    outline={true}
                                     onClick={openSettingsHandler}>
                                         Edit
                                 </Button>
@@ -104,6 +105,7 @@ const ProfileDetails = () => {
                             }
                             {userId !== currentUser.userId && isFollowing &&
                                 <Button 
+                                    outline={true}
                                     onClick={unfollowHandler}>
                                         Unfollow
                                 </Button>
