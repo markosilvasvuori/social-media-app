@@ -1,7 +1,10 @@
 import classes from './Button.module.css';
 
 const Button = (props) => {
-    const styles = `${classes.button} ${props.className ? props.className : ''}`;
+    const styles = `${classes.button} 
+                    ${props.className ? props.className : ''}
+                    ${props.outline ? classes.outline : ''}
+                    `;
 
     const clickHandler = () => {
         props.onClick();
