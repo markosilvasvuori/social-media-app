@@ -37,7 +37,11 @@ const Post = ({ userId, imageId, username, likes, caption, comments }) => {
                         <p className={classes.bold}>{username}</p>
                     </Link>
                 </div>
-                <button>...</button>
+                <button className={classes['menu-button']}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </header>
             <div className={classes.content}>
                 <img src={imageUrl} alt='post' />
