@@ -10,7 +10,10 @@ export const UserProvider = (props) => {
     // If user is already logged in, restore user data from localStorage
     if (!user) {
         const storedUserData = localStorage.getItem('user');
-        setUser(storedUserData);
+        
+        if (storedUserData) {
+            setUser(storedUserData);
+        }
     };
 
     // Get current user's data
