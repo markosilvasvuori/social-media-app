@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebase';
 
 import { UserContext } from '../../store/user-context';
@@ -15,10 +15,17 @@ import UsersModalContent from '../Modal/Content/UsersModalContent';
 const ProfileDetails = () => {
     const [userData, setUserData] = useState({});
     const [isFollowing, setIsFollowing] = useState(false);
+    const [followers, setFollowers] = useState(null);
     const { userId } = useParams();
     const { userCtx } = useContext(UserContext);
     const currentUser = userCtx.user;
     const { modalCtx } = useContext(ModalContext);
+
+    useEffect(() => {
+        const userDataSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
+            setFollowers(doc.data().followers);
+        });
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -33,11 +40,13 @@ const ProfileDetails = () => {
         };
 
         fetchUserData();
-    }, [userId, isFollowing, userData.following, userData.followers]);
+    }, [userId, followers]);
 
     useEffect(() => {
         if (userData.followers?.includes(currentUser.userId)) {
             setIsFollowing(true);
+        } else {
+            setIsFollowing(false);
         }
     }, [userData]);
 
