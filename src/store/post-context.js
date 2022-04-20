@@ -23,7 +23,7 @@ export const PostProvider = (props) => {
     
     const createPostHandler = async (file, caption, userId) => {
         const postRef = ref(storage, `posts/${uniqueId}`);
-        uploadBytes(postRef, file).then((snapshot) => {
+        await uploadBytes(postRef, file).then((snapshot) => {
             console.log('Uploaded file!');
         });
 
