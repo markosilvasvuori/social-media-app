@@ -12,6 +12,7 @@ import Button from '../../UI/Button';
 import classes from './ProfileSettings.module.css';
 import ProfilePicture from '../../UI/ProfilePicture';
 import LoadingSpinner from '../../UI/LoadingSpinner';
+import ErrorMessage from '../../UI/ErrorMessage';
 
 const ProfileSettings = () => {
     const { authCtx } = useContext(AuthContext);
@@ -28,6 +29,17 @@ const ProfileSettings = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
+    const [errors, setErrors] = useState({
+        usernameError: false,
+        emailError: false,
+        passwordError: false,
+        confirmPasswordError: false,
+        passwordsMatchError: false,
+        currentPasswordError: {
+            error: false,
+            message: ''
+        }
+    });
 
     useEffect(() => {
         if (user.username) {
@@ -76,7 +88,15 @@ const ProfileSettings = () => {
         setCurrentPassword(event.target.value);
     };
 
-    const reAuthenticateUser = async () => {
+    const reAuthenticateUser = async (formIsValid) => {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            currentPasswordError: {
+                error: false,
+                message: ''
+            }
+        }));
+
         const credential = EmailAuthProvider.credential(
             auth.currentUser.email,
             currentPassword
@@ -85,13 +105,97 @@ const ProfileSettings = () => {
         const result = await reauthenticateWithCredential(
             auth.currentUser,
             credential
-        );
+        ).then(() => {
+            if (formIsValid) {
+                updateProfile();
+            };
+        }).catch((error) => {
+            console.log(error.message);
+            if (currentPassword === '') {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    currentPasswordError: {
+                        error: true,
+                        message: 'Please enter current password to save changes'
+                    }
+                }));
+            };
+
+            if (currentPassword !== '') {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    currentPasswordError: {
+                        error: true,
+                        message: 'Wrong password'
+                    }
+                }));
+            };
+        });
+    };
+
+    const validateForm = async () => {
+        let formIsValid = true;
+        setErrors({
+            usernameError: false,
+            emailError: false,
+            passwordError: false,
+            confirmPasswordError: false,
+            passwordsMatchError: false,
+            currentPasswordError: {
+                error: false,
+                message: ''
+            }
+        });
+
+        if (username.trim() === '') {
+            formIsValid = false;
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                usernameError: true
+            }));
+        };
+
+        if (!email.trim().includes('@')) {
+            formIsValid = false;
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                emailError: true
+            }));
+        };
+
+        if (password) {
+            if (password.trim().length < 6) {
+                formIsValid = false;
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    passwordError: true
+                }));
+            };
+        }
+
+        if (confirmPassword.trim() === '' && password.trim().length >= 6) {
+            formIsValid = false;
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                confirmPasswordError: true
+            }));
+        };
+
+        if (password.trim().length >= 6 && confirmPassword.trim() !== '') {
+            formIsValid = false;
+            if (password !== confirmPassword) {
+                setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    passwordsMatchError: true
+                }));
+            };
+        };
+        
+        reAuthenticateUser(formIsValid);
     };
 
     const updateProfile = async () => {
         setIsLoading(true);
-
-        reAuthenticateUser();
 
         const userRef = doc(firestoreDB, 'users', user.userId);
         await updateDoc(userRef, {
@@ -99,7 +203,6 @@ const ProfileSettings = () => {
             username: username,
             website: website,
             bio: bio,
-            // email: email,
         });
 
         if (email !== user.email) {
@@ -134,19 +237,6 @@ const ProfileSettings = () => {
         setIsLoading(false);
     };
 
-    useEffect(() => {
-        const arr = [];
-        const fetchdoc = async () => {
-        const querySnapshot = await getDocs(collection(firestoreDB, `users/${user.userId}/posts`));
-
-        querySnapshot.forEach((doc) => {
-            arr.push(doc.data());
-        });
-        console.log(arr);
-        }
-        fetchdoc();
-    }, []);
-
     const deleteAccount = async (event) => {
         event.preventDefault();
 
@@ -180,7 +270,6 @@ const ProfileSettings = () => {
         
         // Delete user
         deleteUser(auth.currentUser).then( async () => {
-            console.log('Account deleted!');
             authCtx.logout();
         }).catch((error) => {
             console.log(error.code);
@@ -205,7 +294,7 @@ const ProfileSettings = () => {
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
-        updateProfile();
+        validateForm();
     };
 
     return (
@@ -265,6 +354,11 @@ const ProfileSettings = () => {
                         value={username}
                         onChange={usernameOnChangeHandler}
                     />
+                    {errors.usernameError &&
+                        <ErrorMessage 
+                            message={'Please enter username'}
+                        />
+                    }
                 </div>
                 <div className={classes['input-container']}>
                     <label htmlFor='website'>Website</label>
@@ -298,6 +392,11 @@ const ProfileSettings = () => {
                         value={email}
                         onChange={emailOnChangeHandler}
                     />
+                    {errors.emailError &&
+                        <ErrorMessage 
+                            message={'Please enter a valid email'}
+                        />
+                    }
                 </div>
                 <div className={classes['input-container']}>
                     <label htmlFor='password'>Change Password</label>
@@ -309,6 +408,11 @@ const ProfileSettings = () => {
                         value={password}
                         onChange={passwordOnChangeHandler}
                     />
+                    {errors.passwordError &&
+                        <ErrorMessage 
+                            message={'Password must be at least 6 characters long'}
+                        />
+                    }
                 </div>
                 <div className={classes['input-container']}>
                     <label htmlFor='confirm-password'>Confirm Password</label>
@@ -320,6 +424,16 @@ const ProfileSettings = () => {
                         value={confirmPassword}
                         onChange={confirmPasswordOnChangeHandler}
                     />
+                    {errors.confirmPasswordError &&
+                        <ErrorMessage 
+                            message={'Confirm password'}
+                        />
+                    }
+                    {errors.passwordsMatchError &&
+                        <ErrorMessage 
+                            message={'Passwords do not match'}
+                        />
+                    }
                 </div>
                 <div className={classes['input-container']}>
                     <label htmlFor='current-password'>Current Password *</label>
@@ -331,10 +445,35 @@ const ProfileSettings = () => {
                         value={currentPassword}
                         onChange={currentPasswordOnChangeHandler}
                     />
+                    {errors.currentPasswordError.error &&
+                        <ErrorMessage 
+                            message={errors.currentPasswordError.message}
+                        />
+                    }
                 </div>
                 {!isLoading &&
                     <Button>Save</Button>
                 }
+
+                {errors.usernameError &&
+                    <p>Please enter username</p>
+                }
+                {errors.emailError &&
+                    <p>Please enter a valid email</p>
+                }
+                {errors.passwordError &&
+                    <p>Password must be at least 6 characters long</p>
+                }
+                {errors.confirmPasswordError &&
+                    <p>Confirm password</p>
+                }
+                {errors.passwordsMatchError &&
+                    <p>Passwords do not match</p>
+                }
+                {errors.currentPasswordError.error &&
+                    <p>{errors.currentPasswordError.message}</p>
+                }
+
                 {!isLoading && 
                     <button 
                         className={classes.delete}
