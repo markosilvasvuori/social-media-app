@@ -12,7 +12,7 @@ const Post = ({ userId, imageId, username, likes, caption, comments }) => {
 
     useEffect(() => {
         const fetchImage = async () => {
-            await getDownloadURL(ref(storage, `posts/${userId}/${imageId}`))
+            await getDownloadURL(ref(storage, `posts/${imageId}`))
             .then((url) => {
                 setImageUrl(url);
             })
