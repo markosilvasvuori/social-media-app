@@ -48,10 +48,12 @@ const UsersModalContent = ({ users, username, category }) => {
                 {usersCollection.map((user) => (
                     <li key={user.userId}>
                         <div className={classes.user}>
-                            <ProfilePicture
-                                userId={user.userId}
-                                size={'small'}
-                            />
+                            <Link to={`profile/${user.userId}`}>
+                                <ProfilePicture
+                                    userId={user.userId}
+                                    size={'small'}
+                                />
+                            </Link>
                             <div className={classes.name}>
                                 <Link 
                                     to={`profile/${user.userId}`}
