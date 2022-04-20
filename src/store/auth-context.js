@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, firestoreDB } from '../firebase/firebase';
 
@@ -22,7 +22,7 @@ export const AuthProvider = (props) => {
         } else {
             setIsLoggedIn(false);
         }
-    })
+    });
 
     // Login
     const loginHandler = (email, password) => {
@@ -37,12 +37,19 @@ export const AuthProvider = (props) => {
                 console.log(error.code);
                 console.log(error.message);
                 setError('Invalid email or password');
+                setIsLoading(false);
             });
     };
 
     // Logout
     const logoutHandler = () => {
-        localStorage.removeItem('user');
+        signOut(auth).then(() => {
+            localStorage.removeItem('user');
+            setIsLoggedIn(false);
+            window.location.href = '/';
+        }).catch((error) => {
+            console.log(error.code);
+        })
     };
 
     // Sign up new user
