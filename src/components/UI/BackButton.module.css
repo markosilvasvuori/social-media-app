@@ -1,0 +1,32 @@
+.back-button {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    width: 22px;
+    height: 22px;
+    transform: translateY(-50%);
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+}
+
+.back-button span {
+    position: absolute;
+    left: 0;
+    display: block;
+    width: 11px;
+    height: 2px;
+    background-color: #000;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.back-button span:first-child {
+    top: 35%;
+    transform: rotate(-45deg);
+}
+
+.back-button span:last-child {
+    transform: rotate(45deg);
+    top: 65%;
+}
