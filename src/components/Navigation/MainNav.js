@@ -31,12 +31,20 @@ const MainNav = () => {
             <ul>
                 <li>
                     <Link to='/'>
-                        <img className={classes.icon} src={homeIcon} alt='home' />
+                        <img 
+                            className={classes.icon} 
+                            src={homeIcon} 
+                            alt='home' 
+                        />
                     </Link>
                 </li>
                 <li>
                     <button onClick={addPostHandler}>
-                        <img className={classes.icon} src={addIcon} alt='add' />
+                        <img 
+                            className={classes.icon} 
+                            src={addIcon} 
+                            alt='add' 
+                        />
                     </button>
                 </li>
                 <li>
