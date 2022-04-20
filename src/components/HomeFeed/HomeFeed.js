@@ -1,5 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
-import { getCollection } from '../../firebase/firebase';
+import { useEffect, useState } from 'react';
 import { auth, firestoreDB } from '../../firebase/firebase';
 import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore';
 
@@ -19,27 +18,32 @@ const HomeFeed = () => {
 
     useEffect(() => {
         const postsArray = [];
+
         const getPosts = async () => {
-            const querySnapshot = await getDocs(collection(firestoreDB, 'users'));
-            querySnapshot.docs.map(async (doc, i) => {
-                const userQuery = followedUsers.length !== 0 ? followedUsers[i] : doc.id;
-                console.log('userQuery: ' + userQuery);
-                const posts = await getDocs(collection(firestoreDB, `users/${userQuery}/posts`));
-                posts.docs.map((post) => {
-                    postsArray.push(post.data());
+            const usersSnapshot = await getDocs(collection(firestoreDB, 'users'));
+
+            // If user follows other users, query only followed users
+            if (followedUsers.length !== 0) {
+                followedUsers.map((followedUser) => {
+                    usersSnapshot.docs.map((doc) => {
+                        if (doc.data().userId === followedUser) {
+                            postsArray.push(doc.data().posts[0]);
+                        };
+                    });
                 });
-                setPosts(postsArray);
-            });
+            };;
+
+            // If user does not follow anyone, query posts from all users
+            if (followedUsers.length === 0) {
+                usersSnapshot.docs.map((doc) => {
+                    postsArray.push(doc.data().posts[0]);
+                });
+            };
+
+            setPosts(postsArray);
         };
 
         getPosts();
-
-        // const getPosts = async () => {
-        //     const posts = await getCollection('posts');
-        //     setPosts(posts);
-        // };
-
-        // getPosts();
     }, [followedUsers]);
 
     return (
