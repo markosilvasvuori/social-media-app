@@ -1,14 +1,10 @@
-import { useContext } from 'react';
-
-import { UserContext } from '../store/user-context';
 import ProfileDetails from '../components/Profile/ProfileDetails';
 import ProfileFeed from '../components/Profile/ProfileFeed';
+import classes from './Styles/Page.module.css';
 
 const Home = () => {
-    const {userCtx} = useContext(UserContext);
-
     return (
-        <div className='page-wrapper'>
+        <div className={classes.wrapper}>
             <ProfileDetails />
             <ProfileFeed />
         </div>
