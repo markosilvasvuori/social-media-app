@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 
-import { doc, updateDoc, deleteDoc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, firestoreDB, storage } from '../../../firebase/firebase';
 import { updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
-import { ref, uploadBytes, deleteObject, listAll } from 'firebase/storage';
+import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 
 import { UserContext } from '../../../store/user-context';
 import { AuthContext } from '../../../store/auth-context';
@@ -125,7 +125,7 @@ const ProfileSettings = () => {
         };
 
         if (profilePicture) {
-            const profilePictureRef = ref(storage, `users/${user.userId}/profilePicture`);
+            const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
             uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
                 console.log('Profile picture uploaded!');
             });
@@ -153,6 +153,27 @@ const ProfileSettings = () => {
         reAuthenticateUser();
 
         // Delete from storage
+        if (user.posts.length !== 0) {
+            user.posts.forEach((post) => {
+                const postRef = ref(storage, `posts/${post.postId}`);
+                deleteObject(postRef).then(() => {
+                    console.log('File deleted successfully');
+                }).catch((error) => {
+                    console.log(error.code);
+                    console.log(error.message);
+                });
+            });
+        };
+
+        const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
+        if (profilePictureRef) {
+            deleteObject(profilePictureRef).then(() => {
+                console.log('Profile picture deleted successfully!');
+            }).catch((error) => {
+                console.log(error.code);
+                console.log(error.message);
+            });
+        };
 
         // Delete from database
         await deleteDoc(doc(firestoreDB, 'users', user.userId));
@@ -160,7 +181,7 @@ const ProfileSettings = () => {
         // Delete user
         deleteUser(auth.currentUser).then( async () => {
             console.log('Account deleted!');
-            // authCtx.logout();
+            authCtx.logout();
         }).catch((error) => {
             console.log(error.code);
             console.log(error.message);
