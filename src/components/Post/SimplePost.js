@@ -10,7 +10,7 @@ const SimplePost = ({ userId, imageId, username, profilePicture, likes, caption,
 
     useEffect(() => {
         const fetchImage = async () => {
-            await getDownloadURL(ref(storage, `posts/${userId}/${imageId}`))
+            await getDownloadURL(ref(storage, `posts/${imageId}/`))
             .then((url) => {
                 setImageUrl(url);
             })
