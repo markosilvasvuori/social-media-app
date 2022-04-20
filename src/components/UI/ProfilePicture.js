@@ -1,76 +1,53 @@
-import { Fragment, useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
 
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
 
 import { UserContext } from '../../store/user-context';
 import { ModalContext } from '../../store/modal-context';
+import profilePicture from '../../images/profile.png';
 import classes from './ProfilePicture.module.css';
 
-const ProfilePicture = ({ size, userId }) => {
-    const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+const ProfilePicture = ({ size, userId, className }) => {
+    const [profilePictureUrl, setProfilePictureUrl] = useState(profilePicture);
     const { userCtx } = useContext(UserContext);
-    const user = userCtx.user;
     const { modalCtx } = useContext(ModalContext);
 
-    useEffect(() => {
-        const fetchProfilePicture = async () => {
-            if (!user.profilePicture) {
-                await getDownloadURL(ref(storage, 'assets/profile.png'))
-                .then((url) => {
-                    setProfilePictureUrl(url);
-                })
-                .catch((error) => {
-                    console.log(error.code);
-                    console.log(error.message);
-                });
-            } else {
-                await getDownloadURL(ref(storage, `users/${userId}/profilePicture/profile`))
-                .then((url) => {
-                    setProfilePictureUrl(url);
-                })
-                .catch((error) => {
-                    console.log(error.code);
-                    console.log(error.message);
-                });
-            };
-        };
-
-        fetchProfilePicture();
-    }, []);
-
     const styles = `${classes['profile-picture']} 
+                    ${className ? className : ''}
                     ${size === 'small' ? classes.small :
                     size === 'medium' ? classes.medium :
                     classes.large
                     }
                 `;
 
+    useEffect(() => {
+        const fetchProfilePicture = async () => {
+            await getDownloadURL(ref(storage, `users/${userId}/profilePicture`))
+                .then((url) => {
+                    setProfilePictureUrl(url);
+                })
+                .catch((error) => {
+                    console.log(error.code);
+                    console.log(error.message);
+                });
+        };
+
+        if (userId) {
+            fetchProfilePicture();
+        };
+    }, [userId]);
+
     return (
-        <Fragment>
-            {modalCtx.modal &&
-            <Link 
-                to={`profile/${userId}`}
-                onClick={modalCtx.modal}
-            >
-                <div className={styles}>
-                    <img 
-                        src={profilePictureUrl} 
-                        alt='profile' 
-                    />
-                </div>
-            </Link>
-            }
-            {!modalCtx.modal &&
-                <div className={styles}>
-                    <img 
-                        src={profilePictureUrl} 
-                        alt='profile' 
-                    />
-                </div>
-            }
-        </Fragment>
+        <div 
+            className={styles} 
+            onClick={modalCtx.modal ? modalCtx.modalHandler : () => {}}
+        >
+            <img 
+                src={profilePictureUrl} 
+                alt='profile' 
+            />
+        </div>
     );
 };
 
