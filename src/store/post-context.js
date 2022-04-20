@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { ref, uploadBytes } from 'firebase/storage';
-import { doc, setDoc } from 'firebase/firestore';
+import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { storage, firestoreDB } from '../firebase/firebase';
 
 import { UserContext } from './user-context';
@@ -21,20 +21,22 @@ export const PostProvider = (props) => {
     };
     const uniqueId = generateUniqueId();
     
-    const createPostHandler = (file, caption, userId) => {
-        const postRef = ref(storage, `posts/${userId}/${uniqueId}`);
-
+    const createPostHandler = async (file, caption, userId) => {
+        const postRef = ref(storage, `posts/${uniqueId}`);
         uploadBytes(postRef, file).then((snapshot) => {
             console.log('Uploaded file!');
         });
 
-        setDoc(doc(firestoreDB, `users/${userId}/posts/${uniqueId}`), {
-            postId: uniqueId,
-            userId: userId,
-            username: userCtx.user.username,
-            caption: caption,
-            likes: [],
-            comments: [],
+        const userRef = doc(firestoreDB, 'users', userId);
+        await updateDoc(userRef, {
+            posts: arrayUnion({
+                postId: uniqueId,
+                userId: userId,
+                username: userCtx.user.username,
+                caption: caption,
+                likes: [],
+                comments: [],
+            })
         });
     };
 
