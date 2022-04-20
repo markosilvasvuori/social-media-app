@@ -1,43 +1,41 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { doc, getDoc, collection, gtDocs, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebase';
 
-import { UserContext } from '../../store/user-context';
 import SimplePost from '../Post/SimplePost';
 import classes from './ProfileFeed.module.css';
 
 const ProfileFeed = () => {
     const [posts, setPosts] = useState([]);
-    const {userCtx} = useContext(UserContext);
-    const currentUser = userCtx.user;
     const {userId} = useParams();
 
     useEffect(() => {
+        // const getPosts = async () => {
+        //     setPosts([]);
+        //     const querySnapshot = await getDocs(collection(firestoreDB, `users/${userId}/posts`));
+        //     querySnapshot.forEach((doc) => {
+        //         setPosts(prevState => ([
+        //             ...prevState,
+        //             doc.data()
+        //         ]));
+        //     });
+        // };
+
         const getPosts = async () => {
-            setPosts([]);
-            const querySnapshot = await getDocs(collection(firestoreDB, `users/${userId}/posts`));
-            querySnapshot.forEach((doc) => {
-                setPosts(prevState => ([
-                    ...prevState,
-                    doc.data()
-                ]));
-            });
+            const userRef = doc(firestoreDB, 'users', userId);
+            const userSnapshot = await getDoc(userRef);
 
-            // const docRef = doc(firestoreDB, 'posts', currentUser.userId);
-            // const docSnapshot = await getDoc(docRef);
-
-            // if (docSnapshot.exists()) {
-            //     console.log(docSnapshot.data());
-            //     setPosts(docSnapshot.data());
-            // } else {
-            //     console.log('Posts not found');
-            // };
+            if (userSnapshot.exists()) {
+                setPosts(userSnapshot.data().posts);
+            }
         };
 
         getPosts();
     }, [userId]);
+
+    useEffect(() => console.log(posts), [posts])
 
     return (
         <div className={classes['profile-feed']}>
