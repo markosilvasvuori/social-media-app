@@ -12,15 +12,15 @@ import { ModalProvider } from './store/modal-context';
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <UserProvider>
-        <PostProvider>
-          <ModalProvider>
+      <ModalProvider>
+        <UserProvider>
+          <PostProvider>      
             <BrowserRouter>
               <App />
             </BrowserRouter>
-          </ModalProvider>
-      </PostProvider>
-      </UserProvider>
+          </PostProvider>
+        </UserProvider>
+      </ModalProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
