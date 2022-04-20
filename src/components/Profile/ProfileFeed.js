@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { firestoreDB } from '../../firebase/firebase';
 
 import SimplePost from '../Post/SimplePost';
@@ -9,33 +9,30 @@ import classes from './ProfileFeed.module.css';
 
 const ProfileFeed = () => {
     const [posts, setPosts] = useState([]);
-    const {userId} = useParams();
+    const [postsLength, setPostsLength] = useState(null);
+    const { userId } = useParams();
 
     useEffect(() => {
-        // const getPosts = async () => {
-        //     setPosts([]);
-        //     const querySnapshot = await getDocs(collection(firestoreDB, `users/${userId}/posts`));
-        //     querySnapshot.forEach((doc) => {
-        //         setPosts(prevState => ([
-        //             ...prevState,
-        //             doc.data()
-        //         ]));
-        //     });
-        // };
+        const postsSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
+            setPostsLength(doc.data().posts.length);
+        });
+    }, []);
 
+    useEffect(() => {
         const getPosts = async () => {
             const userRef = doc(firestoreDB, 'users', userId);
             const userSnapshot = await getDoc(userRef);
 
             if (userSnapshot.exists()) {
-                setPosts(userSnapshot.data().posts);
+                const reversedArray = [...userSnapshot.data().posts].reverse();
+                setPosts(reversedArray);
             }
         };
 
         getPosts();
-    }, [userId]);
+    }, [userId, postsLength]);
 
-    useEffect(() => console.log(posts), [posts])
+    // useEffect(() => console.log(posts), [posts]);
 
     return (
         <div className={classes['profile-feed']}>
