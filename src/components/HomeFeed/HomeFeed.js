@@ -26,7 +26,8 @@ const HomeFeed = () => {
             if (followedUsers.length !== 0) {
                 followedUsers.map((followedUser) => {
                     usersSnapshot.docs.map((doc) => {
-                        if (doc.data().userId === followedUser) {
+                        const user = doc.data();
+                        if (user.userId === followedUser && user.posts.length) {
                             const post = doc.data().posts[doc.data().posts.length - 1];
                             postsArray.push(post);
                         };
@@ -37,11 +38,15 @@ const HomeFeed = () => {
             // If user does not follow anyone, query posts from all users
             if (followedUsers.length === 0) {
                 usersSnapshot.docs.map((doc) => {
-                    const post = doc.data().posts[doc.data().posts.length - 1];
-                    postsArray.push(post);
+                    const user = doc.data();
+                    if (user.posts.length) {
+                        const post = user.posts[user.posts.length - 1];
+                        postsArray.push(post);
+                    }
                 });
             };
 
+            console.log(postsArray);
             setPosts(postsArray);
         };
 
