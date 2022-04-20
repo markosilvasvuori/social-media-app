@@ -23,13 +23,14 @@ const ProfilePicture = ({ size, userId, className }) => {
 
     useEffect(() => {
         const fetchProfilePicture = async () => {
-            await getDownloadURL(ref(storage, `users/${userId}/profilePicture`))
+            await getDownloadURL(ref(storage, `users/profilePictures/${userId}`))
                 .then((url) => {
                     setProfilePictureUrl(url);
                 })
                 .catch((error) => {
                     console.log(error.code);
                     console.log(error.message);
+                    setProfilePictureUrl(profilePicture);
                 });
         };
 
