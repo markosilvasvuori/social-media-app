@@ -7,7 +7,9 @@ const Button = (props) => {
                     `;
 
     const clickHandler = () => {
-        props.onClick();
+        if (props.onClick) {
+            props.onClick();
+        }
     }
 
     return (
