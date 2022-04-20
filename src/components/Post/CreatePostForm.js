@@ -4,12 +4,14 @@ import { PostContext } from '../../store/post-context';
 import { ModalContext } from '../../store/modal-context';
 import { auth } from '../../firebase/firebase';
 import Button from '../UI/Button';
-import classes from './CreatePostForm.module.css';
 import CloseButton from '../UI/CloseButton';
+import LoadingSpinner from '../UI/LoadingSpinner';
+import classes from './CreatePostForm.module.css';
 
 const CreatePostForm = () => {
     const [file, setFile] = useState(null);
     const [caption, setCaption] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { postCtx } = useContext(PostContext);
     const { modalCtx } = useContext(ModalContext);
     const userId = auth.currentUser.uid;
@@ -24,6 +26,7 @@ const CreatePostForm = () => {
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
+        setIsLoading(true);
     
         postCtx.createPost(file, caption, userId);
     };
@@ -50,7 +53,12 @@ const CreatePostForm = () => {
                     value={caption}
                     onChange={enteredCaption}
                 />
+                {!isLoading &&
                 <Button>Post</Button>
+                }
+                {isLoading &&
+                    <LoadingSpinner />
+                }
             </form>
         </Fragment>
     );
