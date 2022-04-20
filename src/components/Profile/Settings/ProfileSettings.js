@@ -7,16 +7,19 @@ import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 
 import { UserContext } from '../../../store/user-context';
 import { AuthContext } from '../../../store/auth-context';
+import { ModalContext } from '../../../store/modal-context';
 import BackButton from '../../UI/BackButton';
 import Button from '../../UI/Button';
 import classes from './ProfileSettings.module.css';
 import ProfilePicture from '../../UI/ProfilePicture';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import ErrorMessage from '../../UI/ErrorMessage';
+import ConfirmAccountDelete from '../../Modal/Content/ConfirmAccountDelete';
 
 const ProfileSettings = () => {
     const { authCtx } = useContext(AuthContext);
     const { userCtx } = useContext(UserContext);
+    const { modalCtx } = useContext(ModalContext);
     const user = userCtx.user;
     const [isLoading, setIsLoading] = useState(false);
     const [userId, setUserId] = useState('');
@@ -234,7 +237,15 @@ const ProfileSettings = () => {
             });
         };
 
+        setPassword('');
+        setConfirmPassword('');
+        setCurrentPassword('');
         setIsLoading(false);
+    };
+
+    const confirmDeleteHandler = (event) => {
+        event.preventDefault();
+        modalCtx.modalHandler(<ConfirmAccountDelete />);
     };
 
     const deleteAccount = async (event) => {
@@ -477,7 +488,7 @@ const ProfileSettings = () => {
                 {!isLoading && 
                     <button 
                         className={classes.delete}
-                        onClick={deleteAccount}
+                        onClick={confirmDeleteHandler}
                     >
                         Delete account
                     </button>
