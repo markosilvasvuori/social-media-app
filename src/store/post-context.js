@@ -4,6 +4,7 @@ import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { storage, firestoreDB } from '../firebase/firebase';
 
 import { UserContext } from './user-context';
+import { ModalContext } from './modal-context';
 
 export const PostContext = createContext({
     createPost: () => {},
@@ -12,7 +13,8 @@ export const PostContext = createContext({
 });
 
 export const PostProvider = (props) => {
-    const {userCtx} = useContext(UserContext);
+    const { userCtx } = useContext(UserContext);
+    const { modalCtx } = useContext(ModalContext);
 
     const generateUniqueId = () => {
         const dateString = Date.now().toString(36);
@@ -38,6 +40,8 @@ export const PostProvider = (props) => {
                 comments: [],
             })
         });
+
+        modalCtx.modalHandler();
     };
 
     const postCtx = {
