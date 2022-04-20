@@ -27,16 +27,18 @@ const HomeFeed = () => {
                 followedUsers.map((followedUser) => {
                     usersSnapshot.docs.map((doc) => {
                         if (doc.data().userId === followedUser) {
-                            postsArray.push(doc.data().posts[0]);
+                            const post = doc.data().posts[doc.data().posts.length - 1];
+                            postsArray.push(post);
                         };
                     });
                 });
-            };;
+            };
 
             // If user does not follow anyone, query posts from all users
             if (followedUsers.length === 0) {
                 usersSnapshot.docs.map((doc) => {
-                    postsArray.push(doc.data().posts[0]);
+                    const post = doc.data().posts[doc.data().posts.length - 1];
+                    postsArray.push(post);
                 });
             };
 
