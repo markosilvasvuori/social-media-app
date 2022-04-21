@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 
-import { doc, updateDoc, deleteDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, firestoreDB, storage } from '../../../firebase/firebase';
 import { updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
 import { ref, uploadBytes, deleteObject } from 'firebase/storage';
@@ -14,7 +14,7 @@ import classes from './ProfileSettings.module.css';
 import ProfilePicture from '../../UI/ProfilePicture';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import ErrorMessage from '../../UI/ErrorMessage';
-import ConfirmAccountDelete from '../../Modal/Content/ConfirmAccountDelete';
+import ConfirmDeleteAccount from '../../Modal/Content/ConfirmDeleteAccount';
 
 const ProfileSettings = () => {
     const { authCtx } = useContext(AuthContext);
@@ -91,7 +91,7 @@ const ProfileSettings = () => {
         setCurrentPassword(event.target.value);
     };
 
-    const reAuthenticateUser = async (formIsValid) => {
+    const reAuthenticateUser = async () => {
         setErrors((prevErrors) => ({
             ...prevErrors,
             currentPasswordError: {
@@ -109,9 +109,7 @@ const ProfileSettings = () => {
             auth.currentUser,
             credential
         ).then(() => {
-            if (formIsValid) {
                 updateProfile();
-            };
         }).catch((error) => {
             console.log(error.message);
             if (currentPassword === '') {
@@ -194,12 +192,15 @@ const ProfileSettings = () => {
             };
         };
         
-        reAuthenticateUser(formIsValid);
+        if (formIsValid) {
+            reAuthenticateUser();
+        }
     };
 
     const updateProfile = async () => {
         setIsLoading(true);
 
+        // Update name, username, website and bio
         const userRef = doc(firestoreDB, 'users', user.userId);
         await updateDoc(userRef, {
             name: name,
@@ -208,6 +209,7 @@ const ProfileSettings = () => {
             bio: bio,
         });
 
+        // Update email if email was changed
         if (email !== user.email) {
             updateEmail(auth.currentUser, email).then(() => {
                 console.log('Email updated!');
@@ -221,6 +223,7 @@ const ProfileSettings = () => {
             });
         };
 
+        // Update password if password was changed
         if (password && (password === confirmPassword)) {
             updatePassword(auth.currentUser, password).then(() => {
                 console.log('Password updated!');
@@ -230,6 +233,7 @@ const ProfileSettings = () => {
             });
         };
 
+        // Update profile picture if profile picture was added
         if (profilePicture) {
             const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
             uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
@@ -245,53 +249,13 @@ const ProfileSettings = () => {
 
     const confirmDeleteHandler = (event) => {
         event.preventDefault();
-        modalCtx.modalHandler(<ConfirmAccountDelete />);
-    };
-
-    const deleteAccount = async (event) => {
-        event.preventDefault();
-
-        reAuthenticateUser();
-
-        // Delete from storage
-        if (user.posts.length !== 0) {
-            user.posts.forEach((post) => {
-                const postRef = ref(storage, `posts/${post.postId}`);
-                deleteObject(postRef).then(() => {
-                    console.log('File deleted successfully');
-                }).catch((error) => {
-                    console.log(error.code);
-                    console.log(error.message);
-                });
-            });
-        };
-
-        const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
-        if (profilePictureRef) {
-            deleteObject(profilePictureRef).then(() => {
-                console.log('Profile picture deleted successfully!');
-            }).catch((error) => {
-                console.log(error.code);
-                console.log(error.message);
-            });
-        };
-
-        // Delete from database
-        await deleteDoc(doc(firestoreDB, 'users', user.userId));
-        
-        // Delete user
-        deleteUser(auth.currentUser).then( async () => {
-            authCtx.logout();
-        }).catch((error) => {
-            console.log(error.code);
-            console.log(error.message);
-        });
+        modalCtx.modalHandler(<ConfirmDeleteAccount />);
     };
 
     const removeProfilePicture = async (event) => {
         event.preventDefault();
 
-        const profilePictureRef = ref(storage, `users/${user.userId}/profilePicture`);
+        const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
         deleteObject(profilePictureRef).then(() => {
             console.log('Profile picture deleted!');
         }).catch((error) => {
