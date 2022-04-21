@@ -1,19 +1,16 @@
-import { useContext } from 'react';
+import { auth } from '../firebase/firebase';
 
-import { AuthContext } from '../store/auth-context';
 import RegisterAndLogin from '../components/RegisterAndLogin/RegisterAndLogin';
 import HomeFeed from '../components/HomeFeed/HomeFeed';
 import classes from './Styles/Page.module.css';
 
 const Home = () => {
-    const {authCtx} = useContext(AuthContext);
-
     return (
         <div className={classes.wrapper}>
-            {!authCtx.isLoggedIn &&
+            {!auth.currentUser &&
                 <RegisterAndLogin />
             }
-            {authCtx.isLoggedIn &&
+            {auth.currentUser &&
                 <HomeFeed />
             }
         </div>
