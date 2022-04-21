@@ -11,9 +11,11 @@ const HomeFeed = () => {
     const currentUserId = auth.currentUser.uid;
 
     useEffect(() => {
-        const userDataSnapshot = onSnapshot(doc(firestoreDB, 'users', currentUserId), (doc) => {
-            setFollowedUsers(doc.data().following);
-        });
+        if (auth.currentUser.uid) {
+            const userDataSnapshot = onSnapshot(doc(firestoreDB, 'users', currentUserId), (doc) => {
+                setFollowedUsers(doc.data().following);
+            });
+        }
     }, []);
 
     useEffect(() => {
@@ -45,8 +47,7 @@ const HomeFeed = () => {
                     }
                 });
             };
-
-            console.log(postsArray);
+            
             setPosts(postsArray);
         };
 
