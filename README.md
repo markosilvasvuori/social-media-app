@@ -1,5 +1,7 @@
 # Social Media App/Website - Work in progress!
 
+![social-media-app (1)](https://user-images.githubusercontent.com/58036499/164448490-49dfcc9b-2973-4c18-a3a5-0ed1d5d5d3a6.gif)
+
 Instagram inspired social media project. Still work in progress!
 
 ## Current features:
