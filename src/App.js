@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
+import { auth } from './firebase/firebase';
 
 
 function App() {
@@ -20,10 +21,10 @@ function App() {
 
   // If logged in, get user data
   useEffect(() => {
-    if (authCtx.isLoggedIn) {
+    if (auth.currentUser) {
       userCtx.getUserData();
     };
-  }, [authCtx.isLoggedIn]);
+  }, [auth.currentUser]);
 
   return (
     <Fragment>
