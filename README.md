@@ -2,6 +2,8 @@
 
 Instagram inspired social media project. Still work in progress!
 
+<img src='https://markosilvasvuori.github.io/static/media/some-app.8a35545340c610abbf7b.gif' alt='preview' />
+
 ## Current features:
 <ul>
     <li>Register and login</li>
