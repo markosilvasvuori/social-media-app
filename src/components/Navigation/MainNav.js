@@ -14,7 +14,6 @@ const MainNav = () => {
     const [userId, setUserId] = useState('');
     const { userCtx } = useContext(UserContext);
     const { modalCtx } = useContext(ModalContext);
-    const currentUser = auth.currentUser;
 
     useEffect(() => {
         if (userCtx.user) {
@@ -50,7 +49,7 @@ const MainNav = () => {
                 <li>
                     <Link to={`profile/${userId}`}>
                         <ProfilePicture
-                            userId={currentUser.uid}
+                            userId={userId}
                             size={'small'}
                         />
                     </Link>
