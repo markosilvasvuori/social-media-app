@@ -44,7 +44,7 @@ const RegisterForm = () => {
                 isValid = false;
                 setError(prevErrors => ([
                     ...prevErrors,
-                    'Passwords does not match'
+                    'Passwords do not match'
                 ]));
             }
         };
