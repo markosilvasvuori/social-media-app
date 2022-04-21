@@ -5,10 +5,11 @@ import { auth, firestoreDB } from '../firebase/firebase';
 
 export const AuthContext = createContext({
     isLoggedIn: false,
+    isLoading: false,
+    error: '',
     login: () => {},
     logout: () => {},
     signUp: () => {},
-    error: '',
 });
 
 export const AuthProvider = (props) => {
@@ -80,11 +81,11 @@ export const AuthProvider = (props) => {
 
     const authCtx = {
         isLoggedIn: isLoggedIn,
+        isLoading: isLoading,
+        error: error,
         login: loginHandler,
         logout: logoutHandler,
         signUp: signUpHandler,
-        isLoading: isLoading,
-        error: error,
     };
 
     return (
