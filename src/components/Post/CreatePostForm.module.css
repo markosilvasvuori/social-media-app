@@ -23,5 +23,11 @@
 .form textarea {
     height: 100px;
     padding: 5px 10px;
+    border: 1px solid #222;
+    border-radius: 2px;
     resize: none;
+}
+
+.form button {
+    margin-bottom: 5px;
 }
