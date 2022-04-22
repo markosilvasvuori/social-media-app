@@ -66,6 +66,20 @@
     height: 100px;
 }
 
+.delete {
+    margin-top: 15px;
+    font-weight: bold;
+    text-decoration: underline;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.error {
+    margin: 5px 0;
+    color: red;
+}
+
 @media screen and (min-width: 768px) {
     .container {
         border: 1px solid lightgray;
