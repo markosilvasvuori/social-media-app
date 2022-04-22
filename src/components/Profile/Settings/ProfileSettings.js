@@ -22,6 +22,7 @@ const ProfileSettings = () => {
     const { modalCtx } = useContext(ModalContext);
     const user = userCtx.user;
     const [isLoading, setIsLoading] = useState(false);
+    const [profileUpdated, setProfileUpdated] = useState(false);
     const [userId, setUserId] = useState('');
     const [profilePicture, setProfilePicture] = useState('');
     const [name, setName] = useState('');
@@ -247,6 +248,19 @@ const ProfileSettings = () => {
         setIsLoading(false);
     };
 
+    // Show and hide 'Changes saved' message
+    useEffect(() => {
+        let timer = null;
+        if (isLoading) {
+            setProfileUpdated(true);
+            timer = setTimeout(() => {
+                setProfileUpdated(false);
+            }, [3000]);
+        };
+
+        return () => clearTimeout(timer);
+    }, [isLoading]);
+
     const confirmDeleteHandler = (event) => {
         event.preventDefault();
         modalCtx.modalHandler(<ConfirmDeleteAccount />);
@@ -430,23 +444,27 @@ const ProfileSettings = () => {
                     <Button>Save</Button>
                 }
 
+                {profileUpdated &&
+                    <p>Changes saved!</p>
+                }
+
                 {errors.usernameError &&
-                    <p>Please enter username</p>
+                    <p className={classes.error}>Please enter username</p>
                 }
                 {errors.emailError &&
-                    <p>Please enter a valid email</p>
+                    <p className={classes.error}>Please enter a valid email</p>
                 }
                 {errors.passwordError &&
-                    <p>Password must be at least 6 characters long</p>
+                    <p className={classes.error}>Password must be at least 6 characters long</p>
                 }
                 {errors.confirmPasswordError &&
-                    <p>Confirm password</p>
+                    <p className={classes.error}>Confirm password</p>
                 }
                 {errors.passwordsMatchError &&
-                    <p>Passwords do not match</p>
+                    <p className={classes.error}>Passwords do not match</p>
                 }
                 {errors.currentPasswordError.error &&
-                    <p>{errors.currentPasswordError.message}</p>
+                    <p className={classes.error}>{errors.currentPasswordError.message}</p>
                 }
 
                 {!isLoading && 
