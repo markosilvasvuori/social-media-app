@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
 
 import { UserContext } from '../../store/user-context';
@@ -28,8 +28,6 @@ const ProfilePicture = ({ size, userId, className }) => {
                     setProfilePictureUrl(url);
                 })
                 .catch((error) => {
-                    console.log(error.code);
-                    console.log(error.message);
                     setProfilePictureUrl(profilePicture);
                 });
         };
@@ -37,7 +35,7 @@ const ProfilePicture = ({ size, userId, className }) => {
         if (userId) {
             fetchProfilePicture();
         };
-    }, [userId]);
+    }, [userId, userCtx.updateProfilePicture]);
 
     return (
         <div 
