@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth'; 
-import { getDatabase } from 'firebase/database' ;
+import { getStorage } from 'firebase/storage' ;
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,7 +19,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-const db = getDatabase(app);
-const storage = getFirestore(app);
+const firestoreDB = getFirestore(app);
+const storage = getStorage(app);
 
-export { auth, db, storage };
+// Get collection from Firestore Database
+export const getCollection = async (collectionName) => {
+  const col = collection(firestoreDB, collectionName);
+  const collectionSnapshot = await getDocs(col);
+  const result = collectionSnapshot.docs.map(doc => doc.data());
+  return result;
+};
+
+export { auth, firestoreDB, storage };
