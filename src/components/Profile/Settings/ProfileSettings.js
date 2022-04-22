@@ -1,6 +1,6 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { auth, firestoreDB, storage } from '../../../firebase/firebase';
 import { updateEmail, updatePassword, EmailAuthProvider, reauthenticateWithCredential, deleteUser } from 'firebase/auth';
 import { ref, uploadBytes, deleteObject } from 'firebase/storage';
@@ -21,6 +21,7 @@ const ProfileSettings = () => {
     const { userCtx } = useContext(UserContext);
     const { modalCtx } = useContext(ModalContext);
     const user = userCtx.user;
+    const fileInputRef = useRef();
     const [isLoading, setIsLoading] = useState(false);
     const [profileUpdated, setProfileUpdated] = useState(false);
     const [userId, setUserId] = useState('');
@@ -112,6 +113,7 @@ const ProfileSettings = () => {
         ).then(() => {
                 updateProfile();
         }).catch((error) => {
+            console.log(error.code);
             console.log(error.message);
             if (currentPassword === '') {
                 setErrors((prevErrors) => ({
@@ -184,8 +186,8 @@ const ProfileSettings = () => {
         };
 
         if (password.trim().length >= 6 && confirmPassword.trim() !== '') {
-            formIsValid = false;
             if (password !== confirmPassword) {
+                formIsValid = false;
                 setErrors((prevErrors) => ({
                     ...prevErrors,
                     passwordsMatchError: true
@@ -235,36 +237,53 @@ const ProfileSettings = () => {
         };
 
         // Update profile picture if profile picture was added
-        if (profilePicture) {
-            const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
-            uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
-                console.log('Profile picture uploaded!');
-            });
-        };
+        // if (profilePicture) {
+        //     const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
+        //     uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
+        //         console.log('Profile picture uploaded!');
+        //         userCtx.updateProfilePicture();
+        //     });
+        // };
 
+        setProfilePicture('');
         setPassword('');
         setConfirmPassword('');
         setCurrentPassword('');
         setIsLoading(false);
+        showChangesSavedMessage();
     };
 
-    // Show and hide 'Changes saved' message
-    useEffect(() => {
-        let timer = null;
-        if (isLoading) {
-            setProfileUpdated(true);
-            timer = setTimeout(() => {
-                setProfileUpdated(false);
-            }, [3000]);
-        };
+    const showChangesSavedMessage = () => {
+        setProfileUpdated(true);
+        const timer = setTimeout(() => {
+            setProfileUpdated(false);
+        }, 3000);
 
         return () => clearTimeout(timer);
-    }, [isLoading]);
+    }
 
     const confirmDeleteHandler = (event) => {
         event.preventDefault();
         modalCtx.modalHandler(<ConfirmDeleteAccount />);
     };
+
+    const profilePictureOnClickHandler = (event) => {
+        fileInputRef.current.click();
+    }
+
+    const changeProfilePicture = () => {
+        const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
+        uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
+            console.log('Profile picture uploaded!');
+            userCtx.updateProfilePicture();
+        });
+    };
+
+    useEffect(() => {
+        if (profilePicture) {
+            changeProfilePicture();
+        };
+    }, [profilePicture]);
 
     const removeProfilePicture = async (event) => {
         event.preventDefault();
@@ -272,6 +291,7 @@ const ProfileSettings = () => {
         const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
         deleteObject(profilePictureRef).then(() => {
             console.log('Profile picture deleted!');
+            userCtx.updateProfilePicture();
         }).catch((error) => {
             console.log(error.message);
         });
@@ -303,23 +323,31 @@ const ProfileSettings = () => {
                 onSubmit={onSubmitHandler}
             >
                 <div className={classes['input-container']}>
-                    <ProfilePicture 
+                    <div 
                         className={classes.picture}
-                        userId={userId}
-                        size={'large'}
-                    />
+                        onClick={profilePictureOnClickHandler}
+                    >
+                        <ProfilePicture 
+                            className={classes.picture}
+                            userId={userId}
+                            size={'large'}
+                        />
+                    </div>
+                    <label htmlFor='profile-picture'>Profile picture</label>
                     <button 
                         className={classes.remove}
                         onClick={removeProfilePicture}
                     >
                         Remove
                     </button>
-                    <label htmlFor='profile-picture'>Profile picture</label>
                     <input 
                         id='profile-picture' 
+                        className={classes.file}
                         type='file' 
                         name='profile-picture'
                         onChange={profilePictureOnChangeHandler}
+                        ref={fileInputRef}
+                        style={{display: 'none'}}
                     />
                 </div>
                 <div className={classes['input-container']}>
