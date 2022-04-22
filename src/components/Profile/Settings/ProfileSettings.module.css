@@ -33,12 +33,36 @@
 }
 
 .picture {
+    position: relative;
+    width: 80px;
+    height: 80px;
     margin-bottom: 15px;
 }
 
-.remove {
+.picture::before {
+    content: 'Change';
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background-color: rgba(0, 0, 0, .4);
+    border-radius: 50%;
+}
+
+.picture:hover::before {
     display: flex;
+}
+
+.remove {
+    display: block;
+    width: 65px;
     margin-bottom: 10px;
+    text-align: left;
     border: none;
     background-color: transparent;
     color: blue;
@@ -95,5 +119,10 @@
 
     .form {
         max-width: 450px;
+    }
+
+    .picture {
+        width: 150px;
+        height: 150px;
     }
 }
