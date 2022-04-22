@@ -7,11 +7,13 @@ import Button from '../UI/Button';
 import CloseButton from '../UI/CloseButton';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import classes from './CreatePostForm.module.css';
+import ErrorMessage from '../UI/ErrorMessage';
 
 const CreatePostForm = () => {
     const [file, setFile] = useState(null);
     const [caption, setCaption] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
     const { postCtx } = useContext(PostContext);
     const { modalCtx } = useContext(ModalContext);
     const userId = auth.currentUser.uid;
@@ -24,11 +26,27 @@ const CreatePostForm = () => {
         setCaption(event.target.value);
     };
 
+    const validateForm = () => {
+        let isValid = true;
+        setError('');
+
+        if (!file) {
+            isValid = false;
+            setError('Please select an image to upload');
+            setIsLoading(false);
+        };
+
+        return isValid;
+    };
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
         setIsLoading(true);
     
-        postCtx.createPost(file, caption, userId);
+        if (validateForm()) {
+            postCtx.createPost(file, caption, userId);
+            setIsLoading(false);
+        };
     };
 
     return (
@@ -54,7 +72,10 @@ const CreatePostForm = () => {
                     onChange={enteredCaption}
                 />
                 {!isLoading &&
-                <Button>Post</Button>
+                    <Button>Post</Button>
+                }
+                {error && 
+                    <ErrorMessage message={error} />
                 }
                 {isLoading &&
                     <LoadingSpinner />
