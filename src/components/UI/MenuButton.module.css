@@ -1,0 +1,20 @@
+.button {
+    display: flex;
+    padding: 10px 5px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.button span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    margin-right: 4px;
+    background-color: #222;
+    border-radius: 50%;
+}
+
+.button span:last-child {
+    margin-right: 0;
+}
