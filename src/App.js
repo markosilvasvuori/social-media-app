@@ -4,8 +4,10 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthContext } from './store/auth-context';
 import { UserContext } from './store/user-context';
 import { ModalContext } from './store/modal-context';
+import { MenuModalContext } from './store/menu-modal-context';
 import Header from './components/Layout/Header';
 import Modal from './components/Modal/Modal';
+import MenuModal from './components/Modal/MenuModal/MenuModal';
 
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -18,6 +20,7 @@ function App() {
   const {authCtx} = useContext(AuthContext);
   const {userCtx} = useContext(UserContext);
   const {modalCtx} = useContext(ModalContext);
+  const {menuModalCtx} = useContext(MenuModalContext);
 
   // If logged in, get user data
   useEffect(() => {
@@ -33,6 +36,9 @@ function App() {
       }
       {modalCtx.modal &&
         <Modal />
+      }
+      {menuModalCtx.menu &&
+        <MenuModal />
       }
       <Routes>
         <Route 
