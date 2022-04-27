@@ -1,35 +1,30 @@
 .post {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+.in-modal {
+    width: 85vw;
+    max-width: 320px;
+}
+
+.in-modal .header {
+    padding: 15px 10px;
+}
+
+.post a {
+    color: #222;
+    text-decoration: none;
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
-}
-
-.menu-button {
-    display: flex;
-    padding: 10px 5px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.menu-button span {
-    display: block;
-    width: 4px;
-    height: 4px;
-    margin-right: 4px;
-    background-color: #222;
-    border-radius: 50%;
-}
-
-.menu-button span:last-child {
-    margin-right: 0;
+    padding: 15px 10px;
 }
 
 .user {
@@ -41,13 +36,9 @@
     cursor: pointer;
 }
 
-.content,
-.content img {
-    width: 100%;
-}
-
 .content {
     position: relative;
+    width: 100%;
 }
 
 .content::before {
@@ -88,6 +79,25 @@
     font-weight: bold;
 }
 
+.caption {
+    margin-left: 5px;
+}
+
 .comments {
     color: gray;
+}
+
+.likes {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.menu {
+    position: relative;
+}
+
+@media screen and (min-width: 620px) {
+    .header {
+        padding: 15px 0;
+    }
 }
