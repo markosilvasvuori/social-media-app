@@ -1,0 +1,25 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+}
+
+.menu button {
+    width: 100%;
+    padding: 15px 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid lightgray;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu button:last-child {
+    border-bottom: none;
+}
+
+@media screen and (min-width: 768px) {
+    .menu {
+        width: 400px;
+    }
+}
