@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
 
+import { ModalContext } from '../../store/modal-context';
 import classes from './SimplePost.module.css';
+import Post from './Post';
 
-const SimplePost = ({ userId, imageId, username, profilePicture, likes, caption, comments }) => {
+const SimplePost = ({ userId, postId, imageId, username, likes, caption, comments }) => {
     const [imageUrl, setImageUrl] = useState(null);
+    const { modalCtx } = useContext(ModalContext);
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -24,7 +27,17 @@ const SimplePost = ({ userId, imageId, username, profilePicture, likes, caption,
     }, []);  
     
     const openInModal = () => {
-        console.log('open in modal');
+        modalCtx.modalHandler(
+            <Post 
+                userId={userId}
+                postId={postId}
+                username={username}
+                likes={likes}
+                caption={caption}
+                comments={comments}
+                inModal={true}
+            />
+        );
     };
 
     return (
