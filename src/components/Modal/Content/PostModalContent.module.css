@@ -1,0 +1,152 @@
+.post {
+    position: relative;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.close {
+    position: relative;
+    width: 34px;
+    height: 24px;
+    display: block;
+}
+
+.image {
+    position: relative;
+    display: none;
+    width: 60%;
+}
+
+.image::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+
+.image img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.menu {
+    position: relative;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header,
+.comments {
+    border-bottom: 1px solid lightgray;
+}
+
+.header,
+.comments,
+.actions {
+    padding: 15px 10px;
+}
+
+.comments {
+    height: 100%;
+    overflow: hidden;
+}
+
+.comments ul {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.likes {
+    margin: 15px 0;
+}
+
+.bottom form {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 10px;
+    border-top: 1px solid lightgray;
+}
+
+.comment-input {
+    height: 60px;
+    width: 80%;
+    border: none;
+}
+
+.comment-button {
+    width: 20%;
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user a,
+.username {
+    text-decoration: none;
+    font-weight: bold;
+    color: #222;
+}
+
+.username {
+    margin-right: 5px;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+}
+
+@media screen and (min-width: 768px) {
+    .post {
+        width: 650px;
+        height: auto;
+        max-height: 530px;
+    }
+
+    .close {
+        display: none;
+    }
+
+    .image {
+        display: block;
+    }
+
+    .container {
+        width: 40%;
+    }
+
+    /* .comments {
+        max-height: 300px;
+    } */
+}
+
+@media screen and (min-width: 1024px) {
+    .post {
+        width: 800px;
+    }
+}
