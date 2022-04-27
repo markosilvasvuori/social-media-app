@@ -6,8 +6,10 @@ export const ModalProvider = (props) => {
     const [modal, setModal] = useState(false);
     const [modalContent, setModalContent] = useState(null);
 
-    const modalHandler = (content) => {
-        setModal(!modal);
+    const modalHandler = (content, handleVisibility = true) => {
+        if (handleVisibility) {
+            setModal(!modal);
+        }
         if (content) {
             setModalContent(content);
         };
