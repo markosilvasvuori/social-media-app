@@ -2,22 +2,51 @@ import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ref, getDownloadURL } from 'firebase/storage';
-import { auth, storage } from '../../firebase/firebase';
+import { auth, storage, firestoreDB } from '../../firebase/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 import ProfilePicture from '../UI/ProfilePicture';
 
 import { ModalContext } from '../../store/modal-context';
 import { MenuModalContext } from '../../store/menu-modal-context';
+import { PostContext } from '../../store/post-context';
 import MenuButton from '../UI/MenuButton';
 import PostModalContent from '../Modal/Content/PostModalContent';
 import classes from './Post.module.css';
 import MenuForOwnPosts from '../Modal/MenuModal/Content/MenuForOwnPosts';
 import MenuForPosts from '../Modal/MenuModal/Content/MenuForPosts';
+import likeIcon from '../../images/like.svg';
+import likedIcon from '../../images/liked.svg';
+import commentIcon from '../../images/comment.svg';
+import UsersModalContent from '../Modal/Content/UsersModalContent';
 
 const Post = ({ userId, postId, username, likes, caption, comments, inModal = false }) => {
+    const [commentsLength, setCommentsLength] = useState(comments.length);
+    const [likesLength, setLikesLength] = useState(likes.length);
     const [imageUrl, setImageUrl] = useState(null);
+    const [liked, setLiked] = useState(false);
     const { modalCtx } = useContext(ModalContext);
     const { menuModalCtx } = useContext(MenuModalContext);
+    const { postCtx } = useContext(PostContext);
     const currentUser = auth.currentUser;
+
+    useEffect(() => {
+        const postsSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
+            const posts = doc.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    setCommentsLength(post.comments.length);
+                    setLikesLength(post.likes.length);
+                    
+                    if (post.likes.includes(currentUser.uid)) {
+                        setLiked(true);
+                    } else {
+                        setLiked(false);
+                    }
+                }
+            });
+        });
+    }, []);
 
     useEffect(() => {
         const fetchImage = async () => {
@@ -32,6 +61,14 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
         };
 
         fetchImage();
+    }, []);
+
+    useEffect(() => {
+        likes.map((like) => {
+            if (like === currentUser.uid) {
+                setLiked(true);
+            };
+        })
     }, []);
 
     const openInModalHandler = () => {
@@ -64,6 +101,16 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
         );
     };
 
+    const addLikeHandler = () => {
+        postCtx.addLike(userId, postId, currentUser.uid);
+        setLiked(true);
+    };
+
+    const removeLikeHandler = () => {
+        postCtx.removeLike(userId, postId, currentUser.uid);
+        setLiked(false);
+    };
+
     const showMenuHandler = () => {
         menuModalCtx.menuHandler(
             userId === currentUser.uid ?
@@ -76,6 +123,16 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
         if (modalCtx.modal) {
             modalCtx.modalHandler();
         }
+    };
+
+    const showLikesHandler = () => {
+        modalCtx.modalHandler(
+            <UsersModalContent 
+                users={likes} 
+                username={username} 
+                category={'Likes'} 
+            />
+        )
     };
 
     return (
@@ -97,12 +154,35 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
             </div>
             <div className={classes.bottom}>
                 <section className={classes.buttons}>
-                    <button>Like</button>
-                    <button>Comment</button>
+                    {!liked &&
+                        <button 
+                            className={classes.icon}
+                            onClick={addLikeHandler}
+                        >
+                            <img src={likeIcon} alt='like' />
+                        </button>
+                    }
+                    {liked &&
+                        <button 
+                            className={classes.icon}
+                            onClick={removeLikeHandler}
+                        >
+                            <img src={likedIcon} alt='liked' />
+                        </button>
+                    }
+                    <button 
+                        className={classes.icon}
+                        onClick={openInModalHandler}
+                    >
+                        <img src={commentIcon} alt='comment' />
+                    </button>
                 </section>
                 <section>
-                    <div className={classes.likes}>
-                        {likes.length} likes
+                    <div 
+                        className={classes.likes}
+                        onClick={showLikesHandler}
+                    >
+                        {likesLength} likes
                     </div>
                 </section>
                 <section>
@@ -121,7 +201,7 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                     className={classes.comments} 
                     onClick={openInModalHandler}
                 >
-                    Show all {comments.length} comments
+                    Show all {commentsLength} comments
                 </button>
             </div>
         </div>
