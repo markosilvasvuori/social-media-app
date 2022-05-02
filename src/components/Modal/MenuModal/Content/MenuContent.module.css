@@ -4,7 +4,7 @@
     width: 250px;
 }
 
-.menu button {
+.menu .button {
     width: 100%;
     padding: 15px 10px;
     background-color: transparent;
@@ -14,8 +14,26 @@
     cursor: pointer;
 }
 
-.menu button:last-child {
+.menu .button:last-child {
     border-bottom: none;
+}
+
+.confirm-delete {
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.confirm-delete .buttons {
+    display: flex;
+    padding: 15px 0;
+}
+
+.buttons button:first-child {
+    margin-right: 30px;
 }
 
 @media screen and (min-width: 768px) {
