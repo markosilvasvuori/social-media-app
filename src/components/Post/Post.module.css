@@ -84,12 +84,26 @@
 }
 
 .comments {
+    border: none;
+    background-color: transparent;
     color: gray;
+    cursor: pointer;
 }
 
 .likes {
     display: inline-block;
     cursor: pointer;
+}
+
+.icon {
+    width: 24px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.icon img {
+    width: 100%;
 }
 
 .menu {
