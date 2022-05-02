@@ -35,12 +35,27 @@ const MenuForPosts = ({ userId }) => {
     return (
         <div className={classes.menu}>
             {isFollowing && 
-                <button onClick={unfollowHandler}>Unfollow</button>
+                <button 
+                    className={classes.button}
+                    onClick={unfollowHandler}
+                >
+                    Unfollow
+                </button>
             }
             {!isFollowing && 
-                <button onClick={followHandler}>Follow</button>
+                <button 
+                    className={classes.button}
+                    onClick={followHandler}
+                >
+                    Follow
+                </button>
             }
-            <button onClick={closeMenuHandler}>Cancel</button>
+            <button 
+                className={classes.button}
+                onClick={closeMenuHandler}
+            >
+                Cancel
+            </button>
         </div>
     );
 };
