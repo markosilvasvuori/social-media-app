@@ -1,0 +1,46 @@
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    text-decoration: none;
+    font-weight: bold;
+    color: #222;
+    margin-right: 5px;
+}
+
+.comment {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 7px;
+    right: 2px;
+    padding: 7px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.delete-button span {
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    width: 10px;
+    height: 1px;
+    background-color: #222;
+}
+
+.delete-button span:first-child {
+    transform: rotate(45deg);
+}
+
+.delete-button span:last-child {
+    transform: rotate(-45deg);
+}
