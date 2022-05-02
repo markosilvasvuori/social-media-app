@@ -16,7 +16,7 @@ const ProfileFeed = () => {
         const postsSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
             setPostsLength(doc.data().posts.length);
         });
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         const getPosts = async () => {
@@ -31,8 +31,6 @@ const ProfileFeed = () => {
 
         getPosts();
     }, [userId, postsLength]);
-
-    // useEffect(() => console.log(posts), [posts]);
 
     return (
         <div className={classes['profile-feed']}>
