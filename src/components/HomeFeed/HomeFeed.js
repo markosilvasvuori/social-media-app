@@ -29,7 +29,7 @@ const HomeFeed = () => {
                 followedUsers.map((followedUser) => {
                     usersSnapshot.docs.map((doc) => {
                         const user = doc.data();
-                        if (user.userId === followedUser && user.posts.length) {
+                        if ((user.userId === followedUser || user.userId === currentUserId) && user.posts.length) {
                             const post = doc.data().posts[doc.data().posts.length - 1];
                             postsArray.push(post);
                         };
@@ -48,6 +48,10 @@ const HomeFeed = () => {
                 });
             };
             
+            postsArray.sort((a, b) => {
+                return b.timestamp.localeCompare(a.timestamp);
+            })
+
             setPosts(postsArray);
         };
 
