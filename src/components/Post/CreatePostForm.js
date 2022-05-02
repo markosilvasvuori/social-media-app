@@ -39,12 +39,12 @@ const CreatePostForm = () => {
         return isValid;
     };
 
-    const onSubmitHandler = (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
         setIsLoading(true);
     
         if (validateForm()) {
-            postCtx.createPost(file, caption, userId);
+            await postCtx.createPost(file, caption, userId);
             setIsLoading(false);
         };
     };
