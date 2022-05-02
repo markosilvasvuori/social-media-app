@@ -8,6 +8,7 @@ export const ModalProvider = (props) => {
 
     const modalHandler = (content, handleVisibility = true) => {
         if (handleVisibility) {
+            document.body.classList.toggle('no-scroll');
             setModal(!modal);
         }
         if (content) {
