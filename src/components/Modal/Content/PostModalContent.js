@@ -33,7 +33,7 @@ const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, 
     const showMenuHandler = () => {
         menuModalCtx.menuHandler(
             userId === currentUser.uid ?
-            <MenuForOwnPosts editPost={editPostHandler} /> :
+            <MenuForOwnPosts postId={postId} editPost={editPostHandler} /> :
             <MenuForPosts userId={userId} />
         );
     };
