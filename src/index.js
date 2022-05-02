@@ -13,8 +13,8 @@ import { MenuModalProvider } from './store/menu-modal-context';
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <ModalProvider>
-        <UserProvider>
+      <UserProvider>
+        <ModalProvider>
           <PostProvider>  
             <MenuModalProvider>    
               <BrowserRouter>
@@ -22,8 +22,8 @@ ReactDOM.render(
               </BrowserRouter>
             </MenuModalProvider>
           </PostProvider>
-        </UserProvider>
-      </ModalProvider>
+        </ModalProvider>
+      </UserProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
