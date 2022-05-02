@@ -8,7 +8,9 @@ import { ModalContext } from './modal-context';
 
 export const PostContext = createContext({
     createPost: () => {},
-    editPost: () => {},
+    saveChanges: () => {},
+    addComment: () => {},
+    deleteComment: () => {},
     deletePost: () => {},
 });
 
@@ -39,6 +41,7 @@ export const PostProvider = (props) => {
                 caption: caption,
                 likes: [],
                 comments: [],
+                timestamp: Date.now().toString(),
             })
         });
 
@@ -68,6 +71,108 @@ export const PostProvider = (props) => {
         };
     };
 
+    const addCommentHandler = async (postId, commenterId, postOwnerId, commenterUsername, comment) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const updatedPosts = [];
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    post.comments.push({
+                        commentId: generateUniqueId(),
+                        userId: commenterId,
+                        username: commenterUsername,
+                        comment: comment
+                    });
+                    updatedPosts.push(post);
+                } else {
+                    updatedPosts.push(post);
+                };
+            });
+
+            await updateDoc(postOwnerRef, {
+                posts: updatedPosts
+            })
+        };
+    };
+
+    const deleteCommentHandler = async (postOwnerId, postId, commentId) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const updatedPosts = [];
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    const comments = post.comments;
+                    const filteredComments = comments.filter(comment => comment.commentId !== commentId);
+                    post.comments = filteredComments;
+                    updatedPosts.push(post);
+                } else {
+                    updatedPosts.push(post);
+                };
+            });
+
+            await updateDoc(postOwnerRef, {
+                posts: updatedPosts
+            });
+        };
+    };
+
+    const addLikeHandler = async (postOwnerId, postId, currentUserId) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const updatedPosts = [];
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    post.likes.push(currentUserId);
+                    updatedPosts.push(post);
+                    console.log('liked');
+                } else {
+                    updatedPosts.push(post);
+                };
+            });
+
+            await updateDoc(postOwnerRef, {
+                posts: updatedPosts
+            })
+        };
+    };
+
+    const removeLikeHandler = async (postOwnerId, postId, currentUserId) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const updatedPosts = [];
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    const likes = post.likes;
+                    const filteredLikes = likes.filter(id => id !== currentUserId);
+                    post.likes = filteredLikes;
+                    updatedPosts.push(post);
+                } else {
+                    updatedPosts.push(post);
+                };
+            });
+
+            await updateDoc(postOwnerRef, {
+                posts: updatedPosts
+            })
+        }; 
+    };
+
     const deletePostHandler = async (postId) => {
         const userRef = doc(firestoreDB, 'users', currentUser.userId);
         const userSnapshot = await getDoc(userRef);
@@ -90,6 +195,10 @@ export const PostProvider = (props) => {
     const postCtx = {
         createPost: createPostHandler,
         saveChanges: saveChangesHandler,
+        addComment: addCommentHandler,
+        addLike: addLikeHandler,
+        removeLike: removeLikeHandler,
+        deleteComment: deleteCommentHandler,
         deletePost: deletePostHandler,
     };
     
