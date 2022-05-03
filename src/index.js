@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
 
 import { AuthProvider } from './store/auth-context';
 import { UserProvider } from './store/user-context';
@@ -18,9 +18,9 @@ root.render(
         <ModalProvider>
           <PostProvider>  
             <MenuModalProvider>    
-              <BrowserRouter>
+              <HashRouter>
                 <App />
-              </BrowserRouter>
+              </HashRouter>
             </MenuModalProvider>
           </PostProvider>
         </ModalProvider>
