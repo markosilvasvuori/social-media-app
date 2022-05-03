@@ -24,9 +24,9 @@ const UsersModalContent = ({ users, username, category }) => {
                 const userSnapshot = await getDoc(userRef);
 
                 if (userSnapshot.exists()) {
-                    setUsersCollection(prevState => [
-                        ...prevState,
-                        userSnapshot.data()
+                    setUsersCollection((prevCollection) => [
+                        userSnapshot.data(),
+                        ...prevCollection,
                     ]);
                 };
             });
