@@ -20,7 +20,7 @@ const ProfileDetails = () => {
     const { userCtx } = useContext(UserContext);
     const { modalCtx } = useContext(ModalContext);
     const currentUser = userCtx.user;
-    const currentUserId = auth.currentUser.uid;
+    // const currentUserId = auth.currentUser.uid;
 
     useEffect(() => {
         const userDataSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
@@ -44,7 +44,7 @@ const ProfileDetails = () => {
     }, [userId, followers]);
 
     useEffect(() => {
-        if (userData.followers?.includes(currentUserId)) {
+        if (userData.followers?.includes(currentUser.userId)) {
             setIsFollowing(true);
         } else {
             setIsFollowing(false);
@@ -95,20 +95,20 @@ const ProfileDetails = () => {
                 <div className={classes.details}>
                     <div className={classes.top}>
                         <h2>{userData.username}</h2>
-                        {userId === currentUserId &&
+                        {userId === currentUser.userId &&
                             <Link to='/profile/settings'>
                                 <Button outline={true}>
                                         Edit
                                 </Button>
                             </Link>
                         }
-                        {userId !== currentUserId && !isFollowing &&
+                        {userId !== currentUser.userId && !isFollowing &&
                             <Button 
                                 onClick={followHandler}>
                                     Follow
                             </Button>
                         }
-                        {userId !== currentUserId && isFollowing &&
+                        {userId !== currentUser.userId && isFollowing &&
                             <Button 
                                 outline={true}
                                 onClick={unfollowHandler}>
