@@ -29,7 +29,7 @@ export const PostProvider = (props) => {
     const createPostHandler = async (file, caption, userId) => {
         const postRef = ref(storage, `posts/${uniqueId}`);
         await uploadBytes(postRef, file).then((snapshot) => {
-            console.log('Uploaded file!');
+            // Uploaded
         });
 
         const userRef = doc(firestoreDB, 'users', userId);
