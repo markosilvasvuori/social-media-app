@@ -11,13 +11,14 @@ import { MenuModalContext } from '../../store/menu-modal-context';
 import { PostContext } from '../../store/post-context';
 import MenuButton from '../UI/MenuButton';
 import PostModalContent from '../Modal/Content/PostModalContent';
-import classes from './Post.module.css';
 import MenuForOwnPosts from '../Modal/MenuModal/Content/MenuForOwnPosts';
 import MenuForPosts from '../Modal/MenuModal/Content/MenuForPosts';
 import likeIcon from '../../images/like.svg';
 import likedIcon from '../../images/liked.svg';
 import commentIcon from '../../images/comment.svg';
 import UsersModalContent from '../Modal/Content/UsersModalContent';
+import PostPlaceholder from './PostPlaceholder';
+import classes from './Post.module.css';
 
 const Post = ({ userId, postId, username, likes, caption, comments, inModal = false }) => {
     const [commentsLength, setCommentsLength] = useState(comments.length);
@@ -150,7 +151,12 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                 <MenuButton onClick={showMenuHandler} />
             </header>
             <div className={classes.content}>
-                <img src={imageUrl} alt='post' />
+                {imageUrl &&
+                    <img src={imageUrl} alt='post' />
+                }
+                {!imageUrl &&
+                    <PostPlaceholder />
+                }
             </div>
             <div className={classes.bottom}>
                 <section className={classes.buttons}>

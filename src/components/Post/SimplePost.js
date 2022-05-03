@@ -4,8 +4,9 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
 
 import { ModalContext } from '../../store/modal-context';
-import classes from './SimplePost.module.css';
 import Post from './Post';
+import PostPlaceholder from './PostPlaceholder';
+import classes from './SimplePost.module.css';
 
 const SimplePost = ({ userId, postId, imageId, username, likes, caption, comments }) => {
     const [imageUrl, setImageUrl] = useState(null);
@@ -42,7 +43,12 @@ const SimplePost = ({ userId, postId, imageId, username, likes, caption, comment
 
     return (
         <div className={classes.post} onClick={openInModal}>
-            <img src={imageUrl} alt='Post' />
+            {imageUrl &&
+                <img src={imageUrl} alt='Post' />
+            }
+            {!imageUrl &&
+                <PostPlaceholder />
+            }
         </div>
     );
 };
