@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
-import { firestoreDB } from '../../firebase/firebase';
+import { auth, firestoreDB } from '../../firebase/firebase';
 
 import { UserContext } from '../../store/user-context';
 import { ModalContext } from '../../store/modal-context';
@@ -18,8 +18,9 @@ const ProfileDetails = () => {
     const [followers, setFollowers] = useState(null);
     const { userId } = useParams();
     const { userCtx } = useContext(UserContext);
-    const currentUser = userCtx.user;
     const { modalCtx } = useContext(ModalContext);
+    const currentUser = userCtx.user;
+    const currentUserId = auth.currentUser.uid;
 
     useEffect(() => {
         const userDataSnapshot = onSnapshot(doc(firestoreDB, 'users', userId), (doc) => {
@@ -43,7 +44,7 @@ const ProfileDetails = () => {
     }, [userId, followers]);
 
     useEffect(() => {
-        if (userData.followers?.includes(currentUser.userId)) {
+        if (userData.followers?.includes(currentUserId)) {
             setIsFollowing(true);
         } else {
             setIsFollowing(false);
@@ -94,20 +95,20 @@ const ProfileDetails = () => {
                 <div className={classes.details}>
                     <div className={classes.top}>
                         <h2>{userData.username}</h2>
-                        {userId === currentUser.userId &&
+                        {userId === currentUserId &&
                             <Link to='/profile/settings'>
                                 <Button outline={true}>
                                         Edit
                                 </Button>
                             </Link>
                         }
-                        {userId !== currentUser.userId && !isFollowing &&
+                        {userId !== currentUserId && !isFollowing &&
                             <Button 
                                 onClick={followHandler}>
                                     Follow
                             </Button>
                         }
-                        {userId !== currentUser.userId && isFollowing &&
+                        {userId !== currentUserId && isFollowing &&
                             <Button 
                                 outline={true}
                                 onClick={unfollowHandler}>
