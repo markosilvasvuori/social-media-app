@@ -60,6 +60,12 @@ const HomeFeed = () => {
 
     return (
         <div className={classes['home-feed']}>
+            {followedUsers.length === 0 &&
+                <div className={classes.message}>
+                    <p>Showing posts from all users.</p>
+                    <p>Follow someone to see posts only from followed users!</p>
+                </div>
+            }
             {posts.map(post => (
                 <Post
                     key={post.postId}
