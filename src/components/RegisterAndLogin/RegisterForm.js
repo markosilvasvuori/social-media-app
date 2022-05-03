@@ -143,7 +143,9 @@ const RegisterForm = () => {
                 }
             {error && 
                 <ul className={classes.error}>
-                    {error.map(err => <li>{err}</li>)}
+                    {error.map((err, index) => 
+                        <li key={index}>{err}</li>
+                    )}
                 </ul>
             }
         </form>
