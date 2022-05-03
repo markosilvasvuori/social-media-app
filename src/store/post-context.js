@@ -127,6 +127,7 @@ export const PostProvider = (props) => {
     const addLikeHandler = async (postOwnerId, postId, currentUserId) => {
         const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
         const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const currentUserRef = doc(firestoreDB, 'users', currentUser.userId);
         const updatedPosts = [];
 
         if (postOwnerSnapshot.exists()) {
@@ -136,7 +137,6 @@ export const PostProvider = (props) => {
                 if (post.postId === postId) {
                     post.likes.push(currentUserId);
                     updatedPosts.push(post);
-                    console.log('liked');
                 } else {
                     updatedPosts.push(post);
                 };
@@ -144,6 +144,13 @@ export const PostProvider = (props) => {
 
             await updateDoc(postOwnerRef, {
                 posts: updatedPosts
+            });
+
+            await updateDoc(currentUserRef, {
+                likedPosts: arrayUnion({
+                    postOwnerId: postOwnerId,
+                    postId: postId
+                })
             })
         };
     };
@@ -151,6 +158,8 @@ export const PostProvider = (props) => {
     const removeLikeHandler = async (postOwnerId, postId, currentUserId) => {
         const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
         const postOwnerSnapshot = await getDoc(postOwnerRef);
+        const currentUserRef = doc(firestoreDB, 'users', currentUser.userId);
+        const currentUserSnapshot = await getDoc(currentUserRef);
         const updatedPosts = [];
 
         if (postOwnerSnapshot.exists()) {
@@ -169,8 +178,17 @@ export const PostProvider = (props) => {
 
             await updateDoc(postOwnerRef, {
                 posts: updatedPosts
-            })
+            });
         }; 
+
+        if (currentUserSnapshot.exists()) {
+            const likedPosts = currentUserSnapshot.data().likedPosts;
+            const filteredLikedPosts = likedPosts.filter(likedPost => likedPost.postId !== postId);
+
+            await updateDoc(currentUserRef, {
+                likedPosts: filteredLikedPosts
+            });
+        }
     };
 
     const deletePostHandler = async (postId) => {
@@ -192,6 +210,24 @@ export const PostProvider = (props) => {
         };
     };
 
+    const getRealtimeLikesHandler = async (postOwnerId, postId) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        let postLikes = [];
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.map((post) => {
+                if (post.postId === postId) {
+                    postLikes = post.likes;
+                };
+            });
+            
+            return postLikes;
+        };
+    };
+
     const postCtx = {
         createPost: createPostHandler,
         saveChanges: saveChangesHandler,
@@ -200,6 +236,7 @@ export const PostProvider = (props) => {
         removeLike: removeLikeHandler,
         deleteComment: deleteCommentHandler,
         deletePost: deletePostHandler,
+        getRealtimeLikes: getRealtimeLikesHandler,
     };
     
     return (
