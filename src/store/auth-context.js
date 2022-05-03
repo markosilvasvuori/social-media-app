@@ -27,12 +27,10 @@ export const AuthProvider = (props) => {
 
     // Login
     const loginHandler = (email, password) => {
-        setIsLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 setIsLoggedIn(true);
-                setIsLoading(false);
             })
             .catch((error) => {
                 console.log(error.code);
