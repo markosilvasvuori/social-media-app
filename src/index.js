@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,8 +10,9 @@ import { PostProvider } from './store/post-context';
 import { ModalProvider } from './store/modal-context';
 import { MenuModalProvider } from './store/menu-modal-context';
 
-ReactDOM.render(
-  <React.StrictMode>
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  // <React.StrictMode>
     <AuthProvider>
       <UserProvider>
         <ModalProvider>
@@ -25,6 +26,5 @@ ReactDOM.render(
         </ModalProvider>
       </UserProvider>
     </AuthProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  // </React.StrictMode>
 );
