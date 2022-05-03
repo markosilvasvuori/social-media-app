@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import { ref, uploadBytes } from 'firebase/storage';
-import { arrayUnion, collection, doc, getDoc, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { storage, firestoreDB } from '../firebase/firebase';
 
 import { UserContext } from './user-context';
@@ -56,7 +56,7 @@ export const PostProvider = (props) => {
         if (userSnapshot.exists()) {
             const posts = userSnapshot.data().posts;
             
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     post.caption = caption;
                     updatedPosts.push(post);
@@ -79,7 +79,7 @@ export const PostProvider = (props) => {
         if (postOwnerSnapshot.exists()) {
             const posts = postOwnerSnapshot.data().posts;
 
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     post.comments.push({
                         commentId: generateUniqueId(),
@@ -107,7 +107,7 @@ export const PostProvider = (props) => {
         if (postOwnerSnapshot.exists()) {
             const posts = postOwnerSnapshot.data().posts;
 
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     const comments = post.comments;
                     const filteredComments = comments.filter(comment => comment.commentId !== commentId);
@@ -133,7 +133,7 @@ export const PostProvider = (props) => {
         if (postOwnerSnapshot.exists()) {
             const posts = postOwnerSnapshot.data().posts;
 
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     post.likes.push(currentUserId);
                     updatedPosts.push(post);
@@ -165,7 +165,7 @@ export const PostProvider = (props) => {
         if (postOwnerSnapshot.exists()) {
             const posts = postOwnerSnapshot.data().posts;
 
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     const likes = post.likes;
                     const filteredLikes = likes.filter(id => id !== currentUserId);
@@ -198,7 +198,7 @@ export const PostProvider = (props) => {
 
         if (userSnapshot.exists()) {
             const posts = userSnapshot.data().posts;
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId !== postId) {
                     updatedPosts.push(post);
                 }
@@ -218,7 +218,7 @@ export const PostProvider = (props) => {
         if (postOwnerSnapshot.exists()) {
             const posts = postOwnerSnapshot.data().posts;
 
-            posts.map((post) => {
+            posts.forEach((post) => {
                 if (post.postId === postId) {
                     postLikes = post.likes;
                 };
