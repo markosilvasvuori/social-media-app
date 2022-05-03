@@ -1,8 +1,7 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { auth } from '../../firebase/firebase';
-import { UserContext } from '../../store/user-context';
 import { ModalContext } from '../../store/modal-context';
 import CreatePostForm from '../Post/CreatePostForm';
 import addIcon from '../../images/addIcon.svg';
@@ -11,15 +10,8 @@ import classes from './MainNav.module.css';
 import ProfilePicture from '../UI/ProfilePicture';
 
 const MainNav = () => {
-    const [userId, setUserId] = useState('');
-    const { userCtx } = useContext(UserContext);
     const { modalCtx } = useContext(ModalContext);
-
-    useEffect(() => {
-        if (userCtx.user) {
-            setUserId(userCtx.user.userId);
-        }
-    }, [userCtx.user]);
+    const currentUserId = auth.currentUser.uid;
 
     const addPostHandler = () => {
         modalCtx.modalHandler(<CreatePostForm />)
@@ -47,9 +39,9 @@ const MainNav = () => {
                     </button>
                 </li>
                 <li>
-                    <Link to={`profile/${userId}`}>
+                    <Link to={`profile/${currentUserId}`}>
                         <ProfilePicture
-                            userId={userId}
+                            userId={currentUserId}
                             size={'small'}
                         />
                     </Link>
