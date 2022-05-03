@@ -56,7 +56,7 @@ export const AuthProvider = (props) => {
         createUserWithEmailAndPassword(auth, newUserData.email, newUserData.password)
         .then((userCredentials) => {
             const user = userCredentials.user;
-            return setDoc(doc(firestoreDB, 'users', user.uid), {
+            setDoc(doc(firestoreDB, 'users', user.uid), {
                 userId: user.uid,
                 name: newUserData.name,
                 username: newUserData.username,
@@ -69,12 +69,15 @@ export const AuthProvider = (props) => {
                 likedPosts: [],
                 profilePicture: null,
             });
+
+            setIsLoggedIn(true);
         })
         .catch((error) => {
             console.log(error.message);
+            if (error.code === 'auth/email-already-in-use') {
+                alert('Email already in use!');
+            }
         });
-
-        setIsLoggedIn(true);
     };
 
     const authCtx = {
