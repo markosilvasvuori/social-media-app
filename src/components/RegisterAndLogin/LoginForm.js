@@ -6,6 +6,7 @@ import LoadingSpinner from '../UI/LoadingSpinner';
 import classes from './Form.module.css';
 
 const LoginForm = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState([]);
     const [enteredEmail, setEnteredEmail] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
@@ -44,9 +45,11 @@ const LoginForm = () => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-
+        setIsLoading(true);
+        
         if (validateForm()) {
             authCtx.login(enteredEmail, enteredPassword);
+            setIsLoading(false);
         }
         
     };
@@ -72,15 +75,17 @@ const LoginForm = () => {
                 }
                 {error && 
                     <ul className={classes.error}>
-                        {error.map(err => <li>{err}</li>)}
+                        {error.map((err, index) => 
+                            <li key={index}>{err}</li>
+                        )}
                     </ul>
                 }
                 {authCtx.error &&
                     <p className={classes.error}>{authCtx.error}</p>
                 }
             </form>
-            <p className={classes.p}>Or</p>
-            <Button className={classes['guest-button']}>Guest Login</Button>
+            {/* <p className={classes.p}>Or</p>
+            <Button className={classes['guest-button']}>Guest Login</Button> */}
         </Fragment>
     );
 };
