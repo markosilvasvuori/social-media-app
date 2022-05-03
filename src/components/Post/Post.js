@@ -126,14 +126,16 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
         }
     };
 
-    const showLikesHandler = () => {
+    const showLikesHandler = async () => {
+        const postLikes = await postCtx.getRealtimeLikes(userId, postId);
         modalCtx.modalHandler(
             <UsersModalContent 
-                users={likes} 
+                users={postLikes} 
                 username={username} 
                 category={'Likes'} 
-            />
-        )
+            />,
+            inModal ? false : true
+        );
     };
 
     return (
