@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { auth, firestoreDB } from "../../../firebase/firebase";
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 
 import { ModalContext } from "../../../store/modal-context";
 import { MenuModalContext } from "../../../store/menu-modal-context";
@@ -108,10 +108,11 @@ const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, 
         setLiked(false);
     };
 
-    const showLikesHandler = () => {
+    const showLikesHandler = async () => {
+        const postLikes = await postCtx.getRealtimeLikes(userId, postId);
         modalCtx.modalHandler(
             <UsersModalContent 
-                users={likes} 
+                users={postLikes} 
                 username={username} 
                 category={'Likes'} 
             />,
