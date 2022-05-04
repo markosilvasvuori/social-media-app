@@ -207,7 +207,7 @@ const ProfileSettings = () => {
         const userRef = doc(firestoreDB, 'users', user.userId);
         await updateDoc(userRef, {
             name: name,
-            username: username,
+            username: username.toLowerCase(),
             website: website,
             bio: bio,
         });
@@ -235,15 +235,6 @@ const ProfileSettings = () => {
                 console.log(error.message);
             });
         };
-
-        // Update profile picture if profile picture was added
-        // if (profilePicture) {
-        //     const profilePictureRef = ref(storage, `users/profilePictures/${user.userId}`);
-        //     uploadBytes(profilePictureRef, profilePicture).then((snapshot) => {
-        //         console.log('Profile picture uploaded!');
-        //         userCtx.updateProfilePicture();
-        //     });
-        // };
 
         setProfilePicture('');
         setPassword('');
