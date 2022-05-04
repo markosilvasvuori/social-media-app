@@ -179,7 +179,11 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                             className={classes.icon}
                             onClick={addLikeHandler}
                         >
-                            <img src={likeIcon} alt='like' />
+                            <img 
+                                className={classes.like}
+                                src={likeIcon} 
+                                alt='like' 
+                            />
                         </button>
                     }
                     {liked &&
@@ -187,7 +191,11 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                             className={classes.icon}
                             onClick={removeLikeHandler}
                         >
-                            <img src={likedIcon} alt='liked' />
+                            <img 
+                                className={classes.liked}
+                                src={likedIcon} 
+                                alt='liked' 
+                            />
                         </button>
                     }
                     <button 
