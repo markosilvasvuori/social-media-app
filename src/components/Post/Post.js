@@ -138,6 +138,14 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
         );
     };
 
+    const doubleClickHandler = () => {
+        if (liked) {
+            removeLikeHandler();
+        } else {
+            addLikeHandler();
+        }
+    };
+
     return (
         <div className={`${classes.post} ${inModal ? classes['in-modal'] : ''}`}>
             <header className={classes.header}>
@@ -154,7 +162,11 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
             </header>
             <div className={classes.content}>
                 {imageUrl &&
-                    <img src={imageUrl} alt='post' />
+                    <img 
+                        src={imageUrl} 
+                        alt='post' 
+                        onDoubleClick={doubleClickHandler} 
+                    />
                 }
                 {!imageUrl &&
                     <PostPlaceholder />
