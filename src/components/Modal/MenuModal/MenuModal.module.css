@@ -16,4 +16,15 @@
     transform: translate(-50%, -50%);
     background-color: #fff;
     z-index: 100;
+    animation: popIn .1s linear;
+}
+
+@keyframes popIn {
+    0% {
+        transform: translate(-50%, -50%) scale(1.4);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
