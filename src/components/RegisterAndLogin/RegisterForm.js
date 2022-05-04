@@ -101,7 +101,7 @@ const RegisterForm = () => {
                 email: enteredEmail,
                 password: enteredPassword,
                 name: enteredName,
-                username: enteredUsername,
+                username: enteredUsername.toLowerCase(),
             };
 
             authCtx.signUp(newUserData);
