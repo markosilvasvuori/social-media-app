@@ -45,7 +45,7 @@ export const AuthProvider = (props) => {
         signOut(auth).then(() => {
             localStorage.removeItem('user');
             setIsLoggedIn(false);
-            window.location.href = '/';
+            window.location.href = '/social-media-app';
         }).catch((error) => {
             console.log(error.code);
         })
