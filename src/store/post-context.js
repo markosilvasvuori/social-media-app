@@ -12,6 +12,8 @@ export const PostContext = createContext({
     addComment: () => {},
     deleteComment: () => {},
     deletePost: () => {},
+    getRealtimeLikes: () => {},
+    getUpdatedCaption: () => {},
 });
 
 export const PostProvider = (props) => {
@@ -228,6 +230,24 @@ export const PostProvider = (props) => {
         };
     };
 
+    const getUpdatedCaptionAfterEditing = async (postOwnerId, postId) => {
+        const postOwnerRef = doc(firestoreDB, 'users', postOwnerId);
+        const postOwnerSnapshot = await getDoc(postOwnerRef);
+        let caption = '';
+
+        if (postOwnerSnapshot.exists()) {
+            const posts = postOwnerSnapshot.data().posts;
+
+            posts.forEach((post) => {
+                if (post.postId === postId) {
+                    caption = post.caption;
+                };
+            });
+
+            return caption;
+        }
+    };
+
     const postCtx = {
         createPost: createPostHandler,
         saveChanges: saveChangesHandler,
@@ -237,6 +257,7 @@ export const PostProvider = (props) => {
         deleteComment: deleteCommentHandler,
         deletePost: deletePostHandler,
         getRealtimeLikes: getRealtimeLikesHandler,
+        getUpdatedCaption: getUpdatedCaptionAfterEditing,
     };
     
     return (
