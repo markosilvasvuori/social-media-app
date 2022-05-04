@@ -23,7 +23,8 @@ import classes from './PostModalContent.module.css';
 const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, comments, editing = false }) => {
     const [isEditing, setIsEditing] = useState(editing);
     const [liked, setLiked] = useState(false);
-    const [likesLength, setLikesLength] = useState(likes.length)
+    const [likesLength, setLikesLength] = useState(likes.length);
+    const [postCaption, setPostCaption] = useState(caption);
     const [enteredCaption, setEnteredCaption] = useState(caption);
     const [enteredComment, setEnteredComment] = useState('');
     const [postComments, setPostComments] = useState(comments);
@@ -61,6 +62,16 @@ const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, 
         })
     }, []);
 
+    useEffect(() => {
+        const getUpdatedCaption = async () => {
+            const updatedCaption = await postCtx.getUpdatedCaption(userId, postId);
+            setPostCaption(updatedCaption);
+            setEnteredCaption(updatedCaption);
+        }
+
+        getUpdatedCaption();
+    }, []);
+
     const captionOnChangeHandler = (event) => {
         setEnteredCaption(event.target.value);
     };
@@ -81,9 +92,12 @@ const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, 
         setIsEditing(!isEditing);
     };
 
-    const saveChangesHandler = () => {
-        postCtx.saveChanges(postId, enteredCaption);
-        closeModalHandler();
+    const saveChangesHandler = async () => {
+        await postCtx.saveChanges(postId, enteredCaption);
+        const updatedCaption = await postCtx.getUpdatedCaption(userId, postId);
+        setPostCaption(updatedCaption);
+        setEnteredCaption(updatedCaption);
+        editPostHandler();
     };
 
     const enteredCommentHandler = (event) => {
@@ -185,7 +199,7 @@ const PostModalContent = ({ userId, postId, imageUrl, username, likes, caption, 
                                     <span>{username}</span>
                                 </Link>
                                 {!isEditing &&
-                                    caption
+                                    postCaption
                                 }
                                 {isEditing &&
                                     <input 
