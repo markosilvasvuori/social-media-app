@@ -5,15 +5,17 @@ import { UserContext } from '../../../../store/user-context';
 import classes from './MenuContent.module.css';
 
 const MenuForPosts = ({ userId }) => {
-    const [isFollowing, setIsFollowing] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(null);
     const { menuModalCtx } = useContext(MenuModalContext);
     const { userCtx } = useContext(UserContext);
     const currentUser = userCtx.user;
 
     useEffect(() => {
         if (currentUser.following.length) {
-            currentUser.following.map((user) => {
-                user === userId ? setIsFollowing(true) : setIsFollowing(false)
+            currentUser.following.forEach((user) => {
+                if (user === userId) {
+                    setIsFollowing(true);
+                }
             });
         }
     }, []);
