@@ -22,6 +22,7 @@ const HomeFeed = () => {
         const postsArray = [];
 
         const getPosts = async () => {
+            let ownPostAddedToFeed = false;
             const usersSnapshot = await getDocs(collection(firestoreDB, 'users'));
 
             // If user follows other users, query only followed users
@@ -29,9 +30,13 @@ const HomeFeed = () => {
                 followedUsers.map((followedUser) => {
                     usersSnapshot.docs.map((doc) => {
                         const user = doc.data();
-                        if ((user.userId === followedUser || user.userId === currentUserId) && user.posts.length) {
+                        if (user.userId === followedUser || (user.userId === currentUserId && !ownPostAddedToFeed) && user.posts.length) {
                             const post = doc.data().posts[doc.data().posts.length - 1];
                             postsArray.push(post);
+                            
+                            if (user.userId === currentUserId && !ownPostAddedToFeed) {
+                                ownPostAddedToFeed = true;
+                            }
                         };
                     });
                 });
