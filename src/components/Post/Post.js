@@ -21,6 +21,7 @@ import PostPlaceholder from './PostPlaceholder';
 import classes from './Post.module.css';
 
 const Post = ({ userId, postId, username, likes, caption, comments, inModal = false }) => {
+    const [postCaption, setPostCaption] = useState(caption);
     const [commentsLength, setCommentsLength] = useState(comments.length);
     const [likesLength, setLikesLength] = useState(likes.length);
     const [imageUrl, setImageUrl] = useState(null);
@@ -70,6 +71,15 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                 setLiked(true);
             };
         })
+    }, []);
+
+    useEffect(() => {
+        const getUpdatedCaption = async () => {
+            const updatedCaption = await postCtx.getUpdatedCaption(userId, postId);
+            setPostCaption(updatedCaption);
+        }
+
+        getUpdatedCaption();
     }, []);
 
     const openInModalHandler = () => {
@@ -222,7 +232,9 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                         >
                             {username}
                         </Link>
-                        <span className={classes.caption}>{caption}</span>
+                        <span className={classes.caption}>
+                            {postCaption}
+                        </span>
                     </span>
                 </section>
                 <button
