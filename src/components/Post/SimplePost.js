@@ -4,13 +4,27 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/firebase';
 
 import { ModalContext } from '../../store/modal-context';
+import { PostContext } from '../../store/post-context';
 import Post from './Post';
 import PostPlaceholder from './PostPlaceholder';
 import classes from './SimplePost.module.css';
 
-const SimplePost = ({ userId, postId, imageId, username, likes, caption, comments }) => {
+const SimplePost = ({ userId, postId, imageId, likes, caption, comments }) => {
+    const [username, setUsername] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
     const { modalCtx } = useContext(ModalContext);
+    const { postCtx } = useContext(PostContext);
+
+    useEffect(() => {
+        const getUsername = async () => {
+            const postUsername = await postCtx.getUsername(userId);
+            setUsername(postUsername);
+        };
+
+        if (!username) {
+            getUsername();
+        }
+    }, []);
 
     useEffect(() => {
         const fetchImage = async () => {
