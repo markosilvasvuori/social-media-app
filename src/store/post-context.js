@@ -8,6 +8,7 @@ import { ModalContext } from './modal-context';
 
 export const PostContext = createContext({
     createPost: () => {},
+    getUsername: () => {},
     saveChanges: () => {},
     addComment: () => {},
     deleteComment: () => {},
@@ -39,7 +40,7 @@ export const PostProvider = (props) => {
             posts: arrayUnion({
                 postId: uniqueId,
                 userId: userId,
-                username: userCtx.user.username,
+                // username: userCtx.user.username,
                 caption: caption,
                 likes: [],
                 comments: [],
@@ -48,6 +49,15 @@ export const PostProvider = (props) => {
         });
 
         modalCtx.modalHandler();
+    };
+
+    const getUsernameHandler = async (userId) => {
+        const userRef = doc(firestoreDB, 'users', userId);
+        const userSnapshot = await getDoc(userRef);
+
+        if (userSnapshot.exists()) {
+            return userSnapshot.data().username;
+        };
     };
 
     const saveChangesHandler = async (postId, caption) => {
@@ -86,7 +96,7 @@ export const PostProvider = (props) => {
                     post.comments.push({
                         commentId: generateUniqueId(),
                         userId: commenterId,
-                        username: commenterUsername,
+                        // username: commenterUsername,
                         comment: comment
                     });
                     updatedPosts.push(post);
@@ -250,6 +260,7 @@ export const PostProvider = (props) => {
 
     const postCtx = {
         createPost: createPostHandler,
+        getUsername: getUsernameHandler,
         saveChanges: saveChangesHandler,
         addComment: addCommentHandler,
         addLike: addLikeHandler,

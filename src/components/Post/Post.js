@@ -20,10 +20,11 @@ import UsersModalContent from '../Modal/Content/UsersModalContent';
 import PostPlaceholder from './PostPlaceholder';
 import classes from './Post.module.css';
 
-const Post = ({ userId, postId, username, likes, caption, comments, inModal = false }) => {
+const Post = ({ userId, postId, likes, caption, comments, inModal = false }) => {
     const [postCaption, setPostCaption] = useState(caption);
     const [commentsLength, setCommentsLength] = useState(comments.length);
     const [likesLength, setLikesLength] = useState(likes.length);
+    const [username, setUsername] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
     const [liked, setLiked] = useState(false);
     const { modalCtx } = useContext(ModalContext);
@@ -48,6 +49,17 @@ const Post = ({ userId, postId, username, likes, caption, comments, inModal = fa
                 }
             });
         });
+    }, []);
+
+    useEffect(() => {
+        const getUsername = async () => {
+            const postUsername = await postCtx.getUsername(userId);
+            setUsername(postUsername);
+        };
+
+        if (!username) {
+            getUsername();
+        }
     }, []);
 
     useEffect(() => {

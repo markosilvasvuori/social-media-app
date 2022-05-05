@@ -47,7 +47,7 @@ const ProfileSettings = () => {
     });
 
     useEffect(() => {
-        if (user.username) {
+        if (user.email) {
             setUserId(user.userId);
             setName(user.name);
             setUsername(user.username);
@@ -242,6 +242,9 @@ const ProfileSettings = () => {
         setCurrentPassword('');
         setIsLoading(false);
         showChangesSavedMessage();
+
+        // Update user data in user context
+        userCtx.getUserData();
     };
 
     const showChangesSavedMessage = () => {
