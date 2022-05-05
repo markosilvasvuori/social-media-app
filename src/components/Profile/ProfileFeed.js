@@ -39,7 +39,6 @@ const ProfileFeed = () => {
                     key={post.postId}
                     userId={post.userId}
                     postId={post.postId}
-                    username={post.username}
                     profilePicture={post.profilePicture}
                     imageId={post.postId}
                     likes={post.likes}
