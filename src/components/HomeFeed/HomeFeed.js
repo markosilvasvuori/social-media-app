@@ -30,9 +30,11 @@ const HomeFeed = () => {
                 followedUsers.map((followedUser) => {
                     usersSnapshot.docs.map((doc) => {
                         const user = doc.data();
-                        if (user.userId === followedUser || (user.userId === currentUserId && !ownPostAddedToFeed) && user.posts.length) {
+                        if (user.userId === followedUser || (user.userId === currentUserId && !ownPostAddedToFeed)) {
                             const post = doc.data().posts[doc.data().posts.length - 1];
-                            postsArray.push(post);
+                            if (post) {
+                                postsArray.push(post);
+                            }
                             
                             if (user.userId === currentUserId && !ownPostAddedToFeed) {
                                 ownPostAddedToFeed = true;
