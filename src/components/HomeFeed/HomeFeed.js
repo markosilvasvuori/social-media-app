@@ -75,7 +75,6 @@ const HomeFeed = () => {
                 <Post
                     key={post.postId}
                     userId={post.userId}
-                    username={post.username}
                     profilePicture={post.profilePicture}
                     postId={post.postId}
                     likes={post.likes}
